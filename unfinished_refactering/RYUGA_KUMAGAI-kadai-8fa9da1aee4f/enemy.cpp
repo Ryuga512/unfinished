@@ -80,7 +80,7 @@ HRESULT InitEnemy(void)
 		enemy[i].w           = 400;
 		enemy[i].h           = 400;
 		enemy[i].rot         = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-		enemy[i].texNo       = i;				// 読みこんだ画像の順番で表示する
+		enemy[i].texNo       = OTHER_DEFAULT;
 
 		enemy[i].countAnim   = 0;
 		enemy[i].patternAnim = 0;		        // アニメのパターン番号
