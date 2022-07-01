@@ -1,0 +1,17 @@
+﻿bg.obj : error LNK2001: 外部シンボル "D3DX11CreateShaderResourceViewFromFileA" は未解決です。
+camera.obj : error LNK2001: 外部シンボル "D3DXMatrixLookAtLH" は未解決です。
+camera.obj : error LNK2001: 外部シンボル "D3DXMatrixPerspectiveFovLH" は未解決です。
+camera.obj : error LNK2001: 外部シンボル "D3DXMatrixInverse" は未解決です。
+input.obj : error LNK2001: 外部シンボル "c_dfDIKeyboard" は未解決です。
+input.obj : error LNK2001: 外部シンボル "GUID_SysMouse" は未解決です。
+input.obj : error LNK2001: 外部シンボル "GUID_SysKeyboard" は未解決です。
+input.obj : error LNK2001: 外部シンボル "IID_IDirectInput8A" は未解決です。
+input.obj : error LNK2001: 外部シンボル "c_dfDIMouse2" は未解決です。
+input.obj : error LNK2001: 外部シンボル "c_dfDIJoystick" は未解決です。
+input.obj : error LNK2001: 外部シンボル "DirectInput8Create" は未解決です。
+renderer.obj : error LNK2001: 外部シンボル "D3D11CreateDeviceAndSwapChain" は未解決です。
+renderer.obj : error LNK2001: 外部シンボル "D3DXMatrixTranspose" は未解決です。
+renderer.obj : error LNK2001: 外部シンボル "D3DXMatrixOrthoOffCenterLH" は未解決です。
+renderer.obj : error LNK2001: 外部シンボル "D3DXMatrixMultiply" は未解決です。
+renderer.obj : error LNK2001: 外部シンボル "D3DX11CompileFromFileA" は未解決です。
+C:\Users\zawaw\Desktop\gakkou\GP11\TH_GP11_GP11A132_12_熊谷隆我\x64\Release\20200706_sprite.exe : fatal error LNK1120: 16 件の未解決の外部参照
