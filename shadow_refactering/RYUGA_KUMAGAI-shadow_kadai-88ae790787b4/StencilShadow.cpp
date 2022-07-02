@@ -61,43 +61,45 @@ bool InitStencilShadow(char *FileName, DX11_MODEL *Model)
 {
     LoadObj(FileName, &g_model);
 
-    // 頂点バッファ生成
+    // 頂点バッファ生成(updatesubresource)
+    //{
+    //    //ボリュームメッシュ用のバーテックスバッファーを作成
+    //    D3D11_BUFFER_DESC bd;
+    //    bd.Usage = D3D11_USAGE_DEFAULT;
+    //    bd.ByteWidth = sizeof(VERTEX_3D) * 100000;
+    //    bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+    //    bd.CPUAccessFlags = 0;
+    //    bd.MiscFlags = 0;
+
+    //    //D3D11_SUBRESOURCE_DATA sd;
+    //    //ZeroMemory(&sd, sizeof(sd));
+    //    //sd.pSysMem = g_model.VertexArray;
+
+    //    D3DDevice->CreateBuffer(&bd, /*&sd*/NULL, &Model->VertexBuffer);
+    //}
+    // 
+    // 頂点バッファ生成(map/unmap)
     {
         //ボリュームメッシュ用のバーテックスバッファーを作成
         D3D11_BUFFER_DESC bd;
-        bd.Usage = D3D11_USAGE_DEFAULT;
+        bd.Usage = D3D11_USAGE_DYNAMIC;
         bd.ByteWidth = sizeof(VERTEX_3D) * 100000;
         bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-        bd.CPUAccessFlags = 0;
+        bd.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
         bd.MiscFlags = 0;
 
         //D3D11_SUBRESOURCE_DATA sd;
         //ZeroMemory(&sd, sizeof(sd));
         //sd.pSysMem = g_model.VertexArray;
 
-        D3DDevice->CreateBuffer(&bd, /*&sd*/NULL, &Model->VertexBuffer);
+        GetDevice()->CreateBuffer(&bd, /*&sd*/NULL, &Model->VertexBuffer);
     }
-    //    // 頂点バッファ生成
-    //{
-    //    D3D11_BUFFER_DESC bd;
-    //    ZeroMemory(&bd, sizeof(bd));
-    //    bd.Usage = D3D11_USAGE_DEFAULT;
-    //    bd.ByteWidth = sizeof(VERTEX_3D) * g_model.VertexNum;
-    //    bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-    //    bd.CPUAccessFlags = 0;
-
-    //    D3D11_SUBRESOURCE_DATA sd;
-    //    ZeroMemory(&sd, sizeof(sd));
-    //    sd.pSysMem = g_model.VertexArray;
-
-    //    GetDevice()->CreateBuffer(&bd, &sd, &Model->VertexBuffer);
-    //}
 
     // インデックスバッファ生成
     {
         D3D11_BUFFER_DESC bd;
         ZeroMemory(&bd, sizeof(bd));
-        bd.Usage = D3D11_USAGE_DEFAULT;
+        bd.Usage = D3D11_USAGE_DYNAMIC;
         bd.ByteWidth = sizeof(unsigned short) * g_model.IndexNum;
         bd.BindFlags = D3D11_BIND_INDEX_BUFFER;
         bd.CPUAccessFlags = 0;
@@ -232,12 +234,10 @@ bool InitStencilShadow(void)
 
 bool CreateStencilShadow(D3DXMATRIX world, LIGHT Light, DX11_MODEL *Model)
 {
-    //D3D11_MAPPED_SUBRESOURCE SubR;
+    D3D11_MAPPED_SUBRESOURCE SubR;
     D3DXVECTOR3 vertex0, vertex1, vertex2, vertex3;
     NumVertices = 0;
-    //ImmediateContext->Map(Model->VertexBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &SubR);
-    //VERTEX_3D *model = (VERTEX_3D*)SubR.pData;
-    VERTEX_3D *model = new VERTEX_3D[100000];
+    //VERTEX_3D *model = new VERTEX_3D[100000];
 
     D3DXVECTOR3 dir = D3DXVECTOR3(Light.Direction.x, Light.Direction.y, Light.Direction.z);
 
@@ -257,80 +257,6 @@ bool CreateStencilShadow(D3DXMATRIX world, LIGHT Light, DX11_MODEL *Model)
     //パターン１～矩形引き伸ばし編～
     /**********************************************************************/
     //全頂点について、引き延ばしを検討
-    for (int i = 0; i < g_model.VertexNum - 3; i += 3)
-    {
-        //頂点を３つ使い、面の法線を求める
-        vertex0 = g_model.VertexArray[i + 0].Position;
-        vertex1 = g_model.VertexArray[i + 1].Position;
-        vertex2 = g_model.VertexArray[i + 2].Position;
-
-
-        D3DXVECTOR3 Normal;
-        D3DXVECTOR3 cross0(vertex1 - vertex0);
-        D3DXVECTOR3 cross1(vertex2 - vertex1);
-        D3DXVec3Cross(&Normal, &cross0, &cross1);
-        D3DXVec3Normalize(&Normal, &Normal);
-
-        // 法線の設定
-        model[i + 0].Normal = Normal;
-        model[i + 1].Normal = Normal;
-        model[i + 2].Normal = Normal;
-
-        // 拡散光の設定
-        model[i + 0].Diffuse = D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.0f);
-        model[i + 1].Diffuse = D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.0f);
-        model[i + 2].Diffuse = D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.0f);
-
-        //ポリゴンの裏側なのかを判定&辺を抽出
-        if (D3DXVec3Dot(&Normal, &dir) <= 0 && D3DXVec3Dot(&Normal, &dir) > -1.0)
-        {
-            edge[Edges + 0] = g_model.IndexArray[i + 0];
-            edge[Edges + 1] = g_model.IndexArray[i + 1];
-
-            edge[Edges + 2] = g_model.IndexArray[i + 1];
-            edge[Edges + 3] = g_model.IndexArray[i + 2];
-
-            edge[Edges + 4] = g_model.IndexArray[i + 2];
-            edge[Edges + 5] = g_model.IndexArray[i + 0];
-
-            Edges += 6;
-
-        }
-    }
-
-    dir = -dir;
-    for (DWORD i = 0; i < Edges - 6; i += 2)
-    {
-        vertex0 = g_model.VertexArray[edge[i + 0]].Position + g_model.VertexArray[edge[i + 0]].Normal * 0.05f;
-        vertex1 = g_model.VertexArray[edge[i + 1]].Position + g_model.VertexArray[edge[i + 1]].Normal * 0.05f;
-        vertex2 = vertex0 + dir * 10000;
-        vertex3 = vertex1 + dir * 10000;
-
-        model[NumVertices + 0].Position = vertex0;
-        model[NumVertices + 1].Position = vertex1;
-        model[NumVertices + 2].Position = vertex2;
-
-        model[NumVertices + 3].Position = vertex1;
-        model[NumVertices + 4].Position = vertex3;
-        model[NumVertices + 5].Position = vertex2;
-
-        //model[NumVertices + 0].Position *= 1.001f;
-        //model[NumVertices + 1].Position *= 1.001f;
-        //model[NumVertices + 2].Position *= 1.001f;
-        //model[NumVertices + 3].Position *= 1.001f;
-        //model[NumVertices + 4].Position *= 1.001f;
-        //model[NumVertices + 5].Position *= 1.001f;
-
-        NumVertices += 6;
-    }
-
-    ImmediateContext->UpdateSubresource(Model->VertexBuffer, 0, NULL, model, 0, 0);
-
-
-    /**********************************************************************/
-    //パターン１～矩形引き伸ばし最適化後編～（未）
-    /**********************************************************************/
-    ////全頂点について、引き延ばしを検討
     //for (int i = 0; i < g_model.VertexNum - 3; i += 3)
     //{
     //    //頂点を３つ使い、面の法線を求める
@@ -397,12 +323,90 @@ bool CreateStencilShadow(D3DXMATRIX world, LIGHT Light, DX11_MODEL *Model)
 
     //    NumVertices += 6;
     //}
-    ////ImmediateContext->Unmap(Model->VertexBuffer, 0);
 
-    ImmediateContext->UpdateSubresource(Model->VertexBuffer, 0, NULL, model, 0, 0);
+    //ImmediateContext->UpdateSubresource(Model->VertexBuffer, 0, NULL, model, 0, 0);
 
-    delete[] edge;
-    delete[] model;
+
+    /**********************************************************************/
+    //パターン１～矩形引き伸ばし最適化後編～完了
+    /**********************************************************************/
+    //全頂点について、引き延ばしを検討
+    ImmediateContext->Map(Model->VertexBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &SubR);
+    VERTEX_3D* model = (VERTEX_3D*)SubR.pData;
+    for (int i = 0; i < g_model.VertexNum - 3; i += 3)
+    {
+        //頂点を３つ使い、面の法線を求める
+        vertex0 = g_model.VertexArray[i + 0].Position;
+        vertex1 = g_model.VertexArray[i + 1].Position;
+        vertex2 = g_model.VertexArray[i + 2].Position;
+
+
+        D3DXVECTOR3 Normal;
+        D3DXVECTOR3 cross0(vertex1 - vertex0);
+        D3DXVECTOR3 cross1(vertex2 - vertex1);
+        D3DXVec3Cross(&Normal, &cross0, &cross1);
+        D3DXVec3Normalize(&Normal, &Normal);
+
+        //// 法線の設定
+        //model[i + 0].Normal = Normal;
+        //model[i + 1].Normal = Normal;
+        //model[i + 2].Normal = Normal;
+
+        //// 拡散光の設定
+        //model[i + 0].Diffuse = D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.0f);
+        //model[i + 1].Diffuse = D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.0f);
+        //model[i + 2].Diffuse = D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.0f);
+
+        //ポリゴンの裏側なのかを判定&辺を抽出
+        if (D3DXVec3Dot(&Normal, &dir) <= 0 && D3DXVec3Dot(&Normal, &dir) > -1.0)
+        {
+            edge[Edges + 0] = g_model.IndexArray[i + 0];
+            edge[Edges + 1] = g_model.IndexArray[i + 1];
+
+            edge[Edges + 2] = g_model.IndexArray[i + 1];
+            edge[Edges + 3] = g_model.IndexArray[i + 2];
+
+            edge[Edges + 4] = g_model.IndexArray[i + 2];
+            edge[Edges + 5] = g_model.IndexArray[i + 0];
+
+            Edges += 6;
+
+        }
+    }
+
+    dir = -dir;
+    for (DWORD i = 0; i < Edges - 6; i += 2)
+    {
+        vertex0 = g_model.VertexArray[edge[i + 0]].Position + g_model.VertexArray[edge[i + 0]].Normal * 0.05f;
+        vertex1 = g_model.VertexArray[edge[i + 1]].Position + g_model.VertexArray[edge[i + 1]].Normal * 0.05f;
+        vertex2 = vertex0 + dir * 10000;
+        vertex3 = vertex1 + dir * 10000;
+
+        model[NumVertices + 0].Position = vertex0;
+        model[NumVertices + 1].Position = vertex1;
+        model[NumVertices + 2].Position = vertex2;
+
+        model[NumVertices + 3].Position = vertex1;
+        model[NumVertices + 4].Position = vertex3;
+        model[NumVertices + 5].Position = vertex2;
+
+        //model[NumVertices + 0].Position *= 1.001f;
+        //model[NumVertices + 1].Position *= 1.001f;
+        //model[NumVertices + 2].Position *= 1.001f;
+        //model[NumVertices + 3].Position *= 1.001f;
+        //model[NumVertices + 4].Position *= 1.001f;
+        //model[NumVertices + 5].Position *= 1.001f;
+
+        NumVertices += 6;
+    }
+    ImmediateContext->Unmap(Model->VertexBuffer, 0);
+
+
+
+    /***************************************************/
+
+    /*delete[] edge;
+    delete[] model;*/
 
     return true;
 }
