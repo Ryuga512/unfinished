@@ -145,6 +145,23 @@ void UpdateCamera(void)
     //    D3DXMatrixRotationAxis(&DeltaMat, &D3DXVECTOR3(PoseMat._31, PoseMat._32, PoseMat._33), 0.01);
     //}
 
+    //左右旋回
+    g_Camera.rot.y = VALUE_ROTATE_CAMERA * GetMousePosX();
+
+    if (g_Camera.rot.x < 1.0f)
+    {
+        g_Camera.rot.x = VALUE_ROTATE_CAMERA * -GetMousePosY() * 0.5f;
+    }
+    if (g_Camera.rot.y < -D3DX_PI)
+    {
+        g_Camera.rot.y = D3DX_PI * 2.0f;
+    }
+    
+    g_Camera.at.x = g_Camera.pos.x + sinf(g_Camera.rot.y) * g_Camera.len;
+    g_Camera.at.z = g_Camera.pos.z + cosf(g_Camera.rot.y) * g_Camera.len;
+
+
+
     if (GetKeyboardPress(DIK_Q) || IsButtonPressed(0, BUTTON_A))
     {// 注視点旋回「左」
         g_Camera.rot.y -= VALUE_ROTATE_CAMERA;

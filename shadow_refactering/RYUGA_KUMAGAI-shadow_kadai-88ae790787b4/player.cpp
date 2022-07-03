@@ -213,7 +213,7 @@ void UpdatePlayer(void)
     }
 
 
-	if (IsMouseRightPressed() && GetKeyboardTrigger(DIK_SPACE) || IsButtonTriggered(0, BUTTON_R))
+	if (IsMouseLeftPressed() || GetKeyboardTrigger(DIK_SPACE) || IsButtonTriggered(0, BUTTON_R))
 	{
         SetBullet(g_Player.pos, D3DXVECTOR3(cam->rot.x, cam->rot.y, cam->rot.z));
 	}
