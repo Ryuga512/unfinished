@@ -416,6 +416,8 @@ void CollisionCheckPlayer(int j)
 
         CollisionCheckBB(player[j].pos, player[j].w * 0.5, player[j].h * 0.5,
                          object[i].pos, object[i].w * 0.5, object[i].h * 0.5, j);
+        CollisionCheckBB(player[j].pre_pos, player[j].w * 0.5, player[j].h * 0.5,
+            object[i].pos, object[i].w * 0.5, object[i].h * 0.5, j);
 
     }
 }

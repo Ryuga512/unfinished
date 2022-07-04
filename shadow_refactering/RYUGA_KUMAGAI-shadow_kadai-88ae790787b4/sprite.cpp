@@ -58,25 +58,6 @@ void SetSprite(ID3D11Buffer *buf, float X, float Y, float Width, float Height, f
 	vertex[3].Diffuse = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
 	vertex[3].TexCoord = D3DXVECTOR2(U + UW, V + VH);
 
-	// ¶ã‚ðŒ´“_‚Æ‚µ‚ÄÝ’è‚·‚éƒvƒƒOƒ‰ƒ€
-	//vertex[0].Position = D3DXVECTOR3(X, Y, 0.0f);
-	//vertex[0].Diffuse = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
-	//vertex[0].TexCoord = D3DXVECTOR2(U, V);
-
-	//vertex[1].Position = D3DXVECTOR3(X + Width, Y, 0.0f);
-	//vertex[1].Diffuse = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
-	//vertex[1].TexCoord = D3DXVECTOR2(U + UW, V);
-
-	//vertex[2].Position = D3DXVECTOR3(X, Y + Height, 0.0f);
-	//vertex[2].Diffuse = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
-	//vertex[2].TexCoord = D3DXVECTOR2(U, V + VH);
-
-	//vertex[3].Position = D3DXVECTOR3(X + Width, Y + Height, 0.0f);
-	//vertex[3].Diffuse = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
-	//vertex[3].TexCoord = D3DXVECTOR2(U + UW, V + VH);
-
-
-
 	GetDeviceContext()->Unmap(buf, 0);
 
 }

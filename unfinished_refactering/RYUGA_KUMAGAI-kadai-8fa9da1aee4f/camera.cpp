@@ -67,15 +67,6 @@ void UninitCamera(void)
 //=============================================================================
 void UpdateCamera(void)
 {
-	//if( GetKeyState( VK_LEFT ) & 0x80 )
-	//{
-	//	g_CameraRotation.y -= 0.02f;
-	//}
-	//else if( GetKeyState( VK_RIGHT ) & 0x80 )
-	//{
-	//	g_CameraRotation.y += 0.02f;
-	//}
-
 
 	PLAYER *player = GetPlayer_p();	// playerの中にプレイヤー配列０番のアドレスが入る
 

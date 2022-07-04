@@ -100,24 +100,6 @@ void UpdateEnemy(void)
     for (int i = 0; i < MAX_ENEMY; i++)
     {
         if (!g_Enemy[i].use) continue;
-        if (i == 0)
-        {	// エネミー０番だけテーブルに従って座標移動（線形補間）
-        //    int nowNo = (int)g_Enemy[i].time;			// 整数分であるテーブル番号を取り出している
-        //    int maxNo = (sizeof(g_MoveTbl) / sizeof(D3DXVECTOR3)); // 登録テーブル数を数えている
-        //    int nextNo = (nowNo + 1) % maxNo;			// 移動先テーブルの番号を求めている
-        //    D3DXVECTOR3	pos = g_MoveTbl[nextNo] - g_MoveTbl[nowNo];// XYZ移動量を計算している
-        //    float nowTime = g_Enemy[i].time - nowNo;	// 時間部分である少数を取り出している
-        //    pos *= nowTime;								// 現在の移動量を計算している
-
-        //    // 計算して求めた移動量を現在の移動テーブルXYZに足している＝表示座標を求めている
-        //    g_Enemy[i].pos = g_MoveTbl[nowNo] + pos;
-
-        //    g_Enemy[i].time += g_MoveSpd[nowNo];	// 時間を進めている
-        //    if ((int)g_Enemy[i].time >= maxNo)		// 登録テーブル最後まで移動したか？
-        //    {
-        //        g_Enemy[i].time -= maxNo;			// ０番目にリセットしつつも小数部分を引き継いでいる
-        //    }
-        }
         //エネミーを動かす場合は影も合わせて動かす
         D3DXVECTOR3 pos = g_Enemy[i].pos;
         pos.y = 0.0f;

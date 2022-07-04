@@ -124,7 +124,7 @@ HRESULT InitPlayer(void)
 		player[i].patternAnim = 0;		
         player[i].attack      = 100;
         player[i].hp          = 100;
-        player[i].pre_pos     = D3DXVECTOR3(-100, 0, 0);
+        player[i].pre_pos     = player[i].pos - D3DXVECTOR3(0, SCREEN_HEIGHT * 0.5, 0);
         player[i].pre_tx      = 0;
         player[i].pre_texNo   = 0;
         for (int j = 0; j < 4; j++)
@@ -135,6 +135,7 @@ HRESULT InitPlayer(void)
         player[i].atk_h       = 15;
         player[i].atk_delay   = ATACK_DELAY;
         player[i].in_attack   = false;
+        player[i].down_z      = false;
 	}
 
 	return S_OK;
@@ -388,18 +389,49 @@ void UpdatePlayer(void)
             }
 
             //‚¢‚Â‚Å‚à”­“®‚Å‚«‚éˆÊ’u
-            if (mode == MODE_GAME && GetKeyboardTrigger(DIK_Z))
+            if (player[i].down_z && GetKeyboardTrigger(DIK_Z))
             {
-                if (player[i].pre_pos.x == -100)
+                player[i].pre_pos = player[i].pos;
+                player[i].down_z = false;
+            }
+            else if (!player[i].down_z && GetKeyboardTrigger(DIK_Z))
+            {
+                player[i].pos = player[i].pre_pos;
+                player[i].down_z = true;
+            }
+            else
+            {
+                // ƒL[“ü—Í‚ÅˆÚ“® 
+                if (GetKeyboardPress(DIK_S))
                 {
-                    player[i].pre_pos = player[i].pos;
+                    if (!player[i].hit[DOWN])
+                    {
+                        player[i].pre_pos.y += PLAYER_SPEED;
+                    }
                 }
-                else
+                else if (GetKeyboardPress(DIK_W))
                 {
-                    player[i].pos = player[i].pre_pos;
-                    player[i].pre_pos = D3DXVECTOR3(-100, 0, 0);
-                }
+                    if (!player[i].hit[UP])
+                    {
+                        player[i].pre_pos.y -= PLAYER_SPEED;
+                    }
 
+                }
+                else if (GetKeyboardPress(DIK_D))
+                {
+                    if (!player[i].hit[RIGHT])
+                    {
+                        player[i].pre_pos.x += PLAYER_SPEED;
+                    }
+                }
+                else if (GetKeyboardPress(DIK_A))
+                {
+                    if (!player[i].hit[LEFT])
+                    {
+                        player[i].pre_pos.x -= PLAYER_SPEED;
+                    }
+                }
+                player[i].down_z = false;
             }
 		}
 

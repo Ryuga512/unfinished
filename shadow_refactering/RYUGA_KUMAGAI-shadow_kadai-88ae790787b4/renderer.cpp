@@ -222,43 +222,10 @@ void SetWorldMatrix( D3DXMATRIX *WorldMatrix )
 
 	GetDeviceContext()->UpdateSubresource( g_WorldBuffer, 0, NULL, &world, 0, 0 );
 
-    //D3D11_MAPPED_SUBRESOURCE pData;
-    //if (SUCCEEDED(GetDeviceContext()->Map(g_WorldBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &pData)))
-    //{
-    //    //ワールド、カメラ、射影行列を渡す
-    //    D3DXMATRIX m = *WorldMatrix;
-    //    D3DXMatrixTranspose(&m, &m);
-
-    //    memcpy_s(pData.pData, pData.RowPitch, (void*)(&m), sizeof(m));
-
-    //    GetDeviceContext()->Unmap(g_WorldBuffer, 0);
-    //}
 
 }
 
 
-//void SetWorldMatrixKage(D3DXMATRIX *WorldMatrix)
-//{
-//    D3D11_MAPPED_SUBRESOURCE pData;
-//    if (SUCCEEDED(GetDeviceContext()->Map(g_WorldBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &pData)))
-//    {
-//        //ワールド、カメラ、射影行列を渡す
-//        D3DXMATRIX m = *WorldMatrix;
-//        D3DXMatrixTranspose(&m, &m);
-//
-//        memcpy_s(pData.pData, pData.RowPitch, (void*)(&m), sizeof(m));
-//
-//        GetDeviceContext()->Unmap(g_WorldBuffer, 0);
-//    }
-//    //透明にするため、アルファ値を渡す
-//    if (SUCCEEDED(GetDeviceContext()->Map(g_MaterialBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &pData)))
-//    {
-//        MATERIAL sg;
-//        sg.Diffuse = D3DXCOLOR(0, 0, 0, 0);//ディフューズカラーをシェーダーに渡す
-//        memcpy_s(pData.pData, pData.RowPitch, (void*)&sg, sizeof(MATERIAL));
-//        GetDeviceContext()->Unmap(g_MaterialBuffer, 0);
-//    }
-//}
 
 void SetViewMatrix( D3DXMATRIX *ViewMatrix )
 {
@@ -267,18 +234,6 @@ void SetViewMatrix( D3DXMATRIX *ViewMatrix )
 	D3DXMatrixTranspose(&view, &view);
 
 	GetDeviceContext()->UpdateSubresource(g_ViewBuffer, 0, NULL, &view, 0, 0);
-
-    //D3D11_MAPPED_SUBRESOURCE pData;
-    //if (SUCCEEDED(GetDeviceContext()->Map(g_WorldBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &pData)))
-    //{
-    //    //ワールド、カメラ、射影行列を渡す
-    //    D3DXMATRIX m = *ViewMatrix;
-    //    D3DXMatrixTranspose(&m, &m);
-
-    //    memcpy_s(pData.pData, pData.RowPitch, (void*)(&m), sizeof(m));
-
-    //    GetDeviceContext()->Unmap(g_ViewBuffer, 0);
-    //}
 
 }
 
@@ -290,18 +245,6 @@ void SetProjectionMatrix( D3DXMATRIX *ProjectionMatrix )
 
 	GetDeviceContext()->UpdateSubresource(g_ProjectionBuffer, 0, NULL, &projection, 0, 0);
 
-    //D3D11_MAPPED_SUBRESOURCE pData;
-    //if (SUCCEEDED(GetDeviceContext()->Map(g_WorldBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &pData)))
-    //{
-    //    //ワールド、カメラ、射影行列を渡す
-    //    D3DXMATRIX m = *ProjectionMatrix;
-    //    D3DXMatrixTranspose(&m, &m);
-
-    //    memcpy_s(pData.pData, pData.RowPitch, (void*)(&m), sizeof(m));
-
-    //    GetDeviceContext()->Unmap(g_ProjectionBuffer, 0);
-    //}
-
 }
 
 
@@ -309,15 +252,6 @@ void SetMaterial( MATERIAL Material )
 {
 
 	GetDeviceContext()->UpdateSubresource( g_MaterialBuffer, 0, NULL, &Material, 0, 0 );
-    //D3D11_MAPPED_SUBRESOURCE pData;
-
-    //if (SUCCEEDED(GetDeviceContext()->Map(g_MaterialBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &pData)))
-    //{
-    //    MATERIAL sg;
-    //    sg = Material;//ディフューズカラーをシェーダーに渡す
-    //    memcpy_s(pData.pData, pData.RowPitch, (void*)&sg, sizeof(MATERIAL));
-    //    GetDeviceContext()->Unmap(g_MaterialBuffer, 0);
-    //}
 
 
 }
@@ -329,17 +263,11 @@ void SetLight(LIGHT Light)
     // ビューマトリックス設定
     D3DXMatrixLookAtLH(&Light.View, &D3DXVECTOR3(LightScale * 100, LightScale * 55, LightScale * 100), &D3DXVECTOR3(0,-20,0), &D3DXVECTOR3(0.0f, 1.0f, 0.0f));
 
-    //SetViewMatrix(&Light.View);
-
-
-    //float det;
-    //D3DXMatrixInverse(&Light.mtxInvView, &det, &Light.View);
 
 
     // プロジェクションマトリックス設定
     D3DXMatrixPerspectiveFovLH(&Light.Projection, 1.0f, (float)SCREEN_WIDTH / (float)SCREEN_HEIGHT, VIEW_NEAR_Z, VIEW_FAR_Z);
 
-    //SetProjectionMatrix(&Light.Projection);
 
 	GetDeviceContext()->UpdateSubresource(g_LightBuffer, 0, NULL, &Light, 0, 0);
 

@@ -409,15 +409,6 @@ HRESULT InitializePad(void)			// パッド初期化
 		if ( FAILED(result) )
 			return false; // データフォーマットの設定に失敗
 
-		// モードを設定（フォアグラウンド＆非排他モード）
-//		result = pGamePad[i]->SetCooperativeLevel(hWindow, DISCL_NONEXCLUSIVE | DISCL_FOREGROUND);
-//		if ( FAILED(result) )
-//			return false; // モードの設定に失敗
-
-		// 軸の値の範囲を設定
-		// X軸、Y軸のそれぞれについて、オブジェクトが報告可能な値の範囲をセットする。
-		// (max-min)は、最大10,000(?)。(max-min)/2が中央値になる。
-		// 差を大きくすれば、アナログ値の細かな動きを捕らえられる。(パッドの性能による)
 		DIPROPRANGE				diprg;
 		ZeroMemory(&diprg, sizeof(diprg));
 		diprg.diph.dwSize		= sizeof(diprg); 

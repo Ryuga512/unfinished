@@ -39,25 +39,6 @@ static PLAYER				g_Parts[PLAYER_PARTS_MAX];		// プレイヤーのパーツ用
 static DX11_MODEL           g_Shadow;
 float roty = D3DX_PI;
 
-// プレイヤーの階層アニメーションデータ
-//static INTERPOLATION_DATA move_tbl[] = {	// pos, rot, scl, frame
-//    { D3DXVECTOR3(0.0f, 10.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f),         D3DXVECTOR3(1.0f, 1.0f, 1.0f), 120 },
-//    { D3DXVECTOR3(0.0f, 10.0f, 0.0f), D3DXVECTOR3(0.0f, -D3DX_PI / 2, 0.0f), D3DXVECTOR3(1.0f, 1.0f, 1.0f), 240 },
-//    { D3DXVECTOR3(0.0f, 10.0f, 0.0f), D3DXVECTOR3(0.0f, D3DX_PI / 2, 0.0f),  D3DXVECTOR3(1.0f, 1.0f, 1.0f), 120 },
-//    { D3DXVECTOR3(0.0f, 10.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f),	     D3DXVECTOR3(1.0f, 1.0f, 1.0f), 120 },
-//
-//};
-
-static INTERPOLATION_DATA move_tbl[] = {	// pos, rot, scl, frame
-    { D3DXVECTOR3(0.0f, 10.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f),         D3DXVECTOR3(1.0f, 1.0f, 1.0f), 120 },
-    { D3DXVECTOR3(0.0f, 10.0f, 0.0f), D3DXVECTOR3(D3DX_PI / 2, 0.0f, 0.0f),  D3DXVECTOR3(1.0f, 1.0f, 1.0f), 120 },
-    { D3DXVECTOR3(0.0f, 10.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f),         D3DXVECTOR3(1.0f, 1.0f, 1.0f), 120 },
-
-};
-
-//run_tbl
-
-//・・・
 
 //=============================================================================
 // 初期化処理
@@ -81,30 +62,6 @@ HRESULT InitPlayer(void)
     g_Player.use = true;
 
     g_Player.radius = 3.5;
-
-//    // 階層アニメーションの初期化
-//    for (int i = 0; i < PLAYER_PARTS_MAX; i++)
-//    {
-//        g_Parts[i].use = true;
-//
-//        // 位置・回転・スケールの初期設定
-//        g_Parts[i].pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-//        g_Parts[i].rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-//        g_Parts[i].scl = D3DXVECTOR3(1.0f, 1.0f, 1.0f);
-//
-//        // 親子関係
-//        g_Parts[i].parent = &g_Player;	// ← ここに親のアドレスを入れる
-////      g_Parts[腕].parent= &g_Player;  // 腕だったら親は本体（プレイヤー） 
-//
-//        // 階層アニメーション用のメンバー変数の初期化
-//        g_Parts[i].tbl_adr = move_tbl;
-//        g_Parts[i].move_time = 0.0f;
-//
-//        // パーツの読み込み
-//        LoadModel(MODEL_PLAYER_PARTS, &g_Parts[i].model);
-//    }
-//    g_Parts[0].parent = &g_Player;	    // 頭は0番
-//    g_Parts[1].parent = &g_Parts[0];	// 頭の上は1番
 
 
 	return S_OK;
@@ -217,55 +174,6 @@ void UpdatePlayer(void)
 	{
         SetBullet(g_Player.pos, D3DXVECTOR3(cam->rot.x, cam->rot.y, cam->rot.z));
 	}
-
-    //if (GetKeyboardPress(DIK_R))
-    //{
-    //    g_Player.pos.z = g_Player.pos.x = 0.0f;
-    //    g_Player.spd = 0.0f;
-    //}
-
-
-
-	// 影もプレイヤーの位置に合わせる
-	//D3DXVECTOR3 pos = g_Player.pos;
-	//pos.y = 0.0f;
-	//SetPositionShadow(g_Player.shadowIdx, pos);
-
-    // 階層アニメーション
-    for (int i = 0; i < PLAYER_PARTS_MAX; i++)
-    {
-        // 使われているなら処理する
-        if (g_Parts[i].use == true)
-        {
-            // 移動処理
-            int		index = (int)g_Parts[i].move_time;
-            float	time = g_Parts[i].move_time - index;
-            int		size = sizeof(move_tbl) / sizeof(INTERPOLATION_DATA);
-
-            float dt = 1.0f / g_Parts[i].tbl_adr[index].frame;	// 1フレームで進める時間
-            g_Parts[i].move_time += dt;					// アニメーションの合計時間に足す
-
-            if (index > (size - 2))	// ゴールをオーバーしていたら、ゴールへ戻す
-            {
-                g_Parts[i].move_time = 0.0f;
-                index = 0;
-            }
-
-            // 座標を求める	X = StartX + (EndX - StartX) * 今の時間
-            D3DXVECTOR3 vec = g_Parts[i].tbl_adr[index + 1].pos - g_Parts[i].tbl_adr[index].pos;
-            g_Parts[i].pos = g_Parts[i].tbl_adr[index].pos + vec * time;
-
-            // 回転を求める	R = StartX + (EndX - StartX) * 今の時間
-            D3DXVECTOR3 rot = g_Parts[i].tbl_adr[index + 1].rot - g_Parts[i].tbl_adr[index].rot;
-            g_Parts[i].rot = g_Parts[i].tbl_adr[index].rot + rot * time;
-
-            // scaleを求める S = StartX + (EndX - StartX) * 今の時間
-            D3DXVECTOR3 scl = g_Parts[i].tbl_adr[index + 1].scl - g_Parts[i].tbl_adr[index].scl;
-            g_Parts[i].scl = g_Parts[i].tbl_adr[index].scl + scl * time;
-
-
-        }
-    }
 
 
 }

@@ -182,10 +182,6 @@ void DrawBullet(void)
                     g_aBullet[nCntBullet].scl.z);
             D3DXMatrixMultiply(&g_aBullet[nCntBullet].mtxWorld, &g_aBullet[nCntBullet].mtxWorld, &mtxScale);
 
-            ////‰ñ“]‚ð”½‰f
-            //D3DXMatrixRotationYawPitchRoll(&mtxRot, g_aBullet[nCntBullet].rot.y, g_aBullet[nCntBullet].rot.x, g_aBullet[nCntBullet].rot.z);
-            //D3DXMatrixMultiply(&g_aBullet[nCntBullet].mtxWorld, &g_aBullet[nCntBullet].mtxWorld, &mtxRot);
-
             // ˆÚ“®‚ð”½‰f
             D3DXMatrixTranslation(&mtxTranslate, g_aBullet[nCntBullet].pos.x,
                 g_aBullet[nCntBullet].pos.y,

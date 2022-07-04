@@ -117,34 +117,6 @@ void UpdateCamera(void)
     PLAYER *player = GetPlayer();
 
 
-    ////Yaw成分
-    //if (GetKeyState(VK_LEFT) & 0x80)
-    //{
-    //    D3DXMatrixRotationAxis(&DeltaMat, &D3DXVECTOR3(PoseMat._21, PoseMat._22, PoseMat._23), -0.01);
-    //}
-    //else if (GetKeyState(VK_RIGHT) & 0x80)
-    //{
-    //    D3DXMatrixRotationAxis(&DeltaMat, &D3DXVECTOR3(PoseMat._21, PoseMat._22, PoseMat._23), 0.01);
-    //}
-    ////Pitch成分
-    //else if (GetKeyState(VK_UP) & 0x80)
-    //{
-    //    D3DXMatrixRotationAxis(&DeltaMat, &D3DXVECTOR3(PoseMat._11, PoseMat._12, PoseMat._13), -0.01);
-    //}
-    //else if (GetKeyState(VK_DOWN) & 0x80)
-    //{
-    //    D3DXMatrixRotationAxis(&DeltaMat, &D3DXVECTOR3(PoseMat._11, PoseMat._12, PoseMat._13), 0.01);
-    //}
-    ////Roll成分
-    //else if (GetKeyState('Z') & 0x80)
-    //{
-    //    D3DXMatrixRotationAxis(&DeltaMat, &D3DXVECTOR3(PoseMat._31, PoseMat._32, PoseMat._33), -0.01);
-    //}
-    //else if (GetKeyState('X') & 0x80)
-    //{
-    //    D3DXMatrixRotationAxis(&DeltaMat, &D3DXVECTOR3(PoseMat._31, PoseMat._32, PoseMat._33), 0.01);
-    //}
-
     //左右旋回
     g_Camera.rot.y = VALUE_ROTATE_CAMERA * GetMousePosX();
 
@@ -208,14 +180,6 @@ void UpdateCamera(void)
     }
 
 
-    if (!g_Camera.event_camera)
-    {
-        //cam->at = g_Player.pos;
-        //cam->pos = cam->at + D3DXVECTOR3(0.0f, 50.0f, -140.0f);
-        //cam->pos.x = cam->at.x - sinf(cam->rot.y) * cam->len;
-        //cam->pos.z = cam->at.z - cosf(cam->rot.y) * cam->len;
-    }
-
 
 
     //右クリックでズーム、離すと戻る
@@ -239,66 +203,6 @@ void UpdateCamera(void)
     }
 
     g_Camera.at.y = g_Camera.pos.y + sinf(g_Camera.rot.x) * g_Camera.len;
-    //if (GetKeyboardPress(DIK_M))
-    //{// 離れる
-    //    g_Camera.len += VALUE_MOVE_CAMERA;
-    //    g_Camera.pos.x = g_Camera.at.x - sinf(g_Camera.rot.y) * g_Camera.len;
-    //    g_Camera.pos.z = g_Camera.at.z - cosf(g_Camera.rot.y) * g_Camera.len;
-    //}
-
-    //// カメラを初期に戻す
-    //if (GetKeyboardPress(DIK_R))
-    //{
-    //    UninitCamera();
-    //    InitCamera();
-    //}
-
-    //if (GetKeyboardTrigger(DIK_9))
-    //{
-    //    g_Camera.event_camera = g_Camera.event_camera ? false : true;
-    //}
-
-    //if (g_Camera.event_camera)
-    //{
-    //    {
-    //    // エネミー０番だけテーブルに従って座標移動（線形補間）
-    //    int nowNo = (int)g_Camera.time_at;			// 整数分であるテーブル番号を取り出している
-    //    int maxNo = (sizeof(g_MoveTbl_at) / sizeof(D3DXVECTOR3));       // 登録テーブル数を数えている
-    //    int nextNo = (nowNo + 1) % maxNo;			// 移動先テーブルの番号を求めている
-    //    D3DXVECTOR3	pos = g_MoveTbl_at[nextNo] - g_MoveTbl_at[nowNo];   // XYZ移動量を計算している
-    //    float nowTime = g_Camera.time_at - nowNo;	// 時間部分である少数を取り出している
-    //    pos *= nowTime;								// 現在の移動量を計算している
-
-    //    // 計算して求めた移動量を現在の移動テーブルXYZに足している＝表示座標を求めている
-    //    g_Camera.at = g_MoveTbl_at[nowNo] + pos;
-
-    //    g_Camera.time_at += g_MoveSpd_at[nowNo];	// 時間を進めている
-    //    if ((int)g_Camera.time_at >= maxNo)		    // 登録テーブル最後まで移動したか？
-    //    {
-    //        g_Camera.time_at -= maxNo;			    // ０番目にリセットしつつも小数部分を引き継いでいる
-    //    }
-    //}
-
-    //    {
-    //    // エネミー０番だけテーブルに従って座標移動（線形補間）
-    //    int nowNo = (int)g_Camera.time_pos;			// 整数分であるテーブル番号を取り出している
-    //    int maxNo = (sizeof(g_MoveTbl_pos) / sizeof(D3DXVECTOR3));       // 登録テーブル数を数えている
-    //    int nextNo = (nowNo + 1) % maxNo;			// 移動先テーブルの番号を求めている
-    //    D3DXVECTOR3	pos = g_MoveTbl_pos[nextNo] - g_MoveTbl_pos[nowNo];   // XYZ移動量を計算している
-    //    float nowTime = g_Camera.time_pos - nowNo;	// 時間部分である少数を取り出している
-    //    pos *= nowTime;								// 現在の移動量を計算している
-
-    //    // 計算して求めた移動量を現在の移動テーブルXYZに足している＝表示座標を求めている
-    //    g_Camera.pos = g_MoveTbl_pos[nowNo] + pos;
-
-    //    g_Camera.time_pos += g_MoveSpd_pos[nowNo];	// 時間を進めている
-    //    if ((int)g_Camera.time_pos >= maxNo)		    // 登録テーブル最後まで移動したか？
-    //    {
-    //        g_Camera.time_pos -= maxNo;			    // ０番目にリセットしつつも小数部分を引き継いでいる
-    //    }
-    //    }
-
-    //}
 
 }
 
@@ -311,17 +215,6 @@ void DrawCamera(void)
 //=============================================================================
 void SetCamera(void) 
 {
-    ////微小変化を足しこむ
-    //PoseMat *= DeltaMat;
-
-    //D3DXVECTOR3 CamDir;//カメラが向く方向
-    //CamDir = D3DXVECTOR3(0, 0, 1);//最初はZ軸方向を向くところからスタート
-    //D3DXVec3TransformCoord(&CamDir, &CamDir, &PoseMat);
-
-    //// ビュートランスフォーム　これが”カメラ”
-    //D3DXVECTOR3 LookPos = g_Camera.pos + CamDir;//注視点　この点とカメラ位置からカメラの方向が決定される
-    //D3DXVec3TransformCoord(&g_Camera.up, &g_Camera.up, &PoseMat);
-
 	// ビューマトリックス設定
 	D3DXMatrixLookAtLH(&g_Camera.mtxView, &g_Camera.pos, &g_Camera.at, &g_Camera.up);
 
