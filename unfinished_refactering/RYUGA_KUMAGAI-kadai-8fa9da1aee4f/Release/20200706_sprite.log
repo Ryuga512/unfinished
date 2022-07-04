@@ -1,21 +1,55 @@
-﻿  main.cpp
-c:\users\zawaw\desktop\gakkou\gp11\th_gp11_gp11a132_12_熊谷隆我\main.cpp(416): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
-c:\users\zawaw\desktop\gakkou\gp11\th_gp11_gp11a132_12_熊谷隆我\main.cpp(415): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
-c:\users\zawaw\desktop\gakkou\gp11\th_gp11_gp11a132_12_熊谷隆我\main.cpp(523): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
-c:\users\zawaw\desktop\gakkou\gp11\th_gp11_gp11a132_12_熊谷隆我\main.cpp(522): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
-c:\users\zawaw\desktop\gakkou\gp11\th_gp11_gp11a132_12_熊谷隆我\main.cpp(542): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
-c:\users\zawaw\desktop\gakkou\gp11\th_gp11_gp11a132_12_熊谷隆我\main.cpp(541): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
-c:\users\zawaw\desktop\gakkou\gp11\th_gp11_gp11a132_12_熊谷隆我\main.cpp(561): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
-c:\users\zawaw\desktop\gakkou\gp11\th_gp11_gp11a132_12_熊谷隆我\main.cpp(560): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
-c:\users\zawaw\desktop\gakkou\gp11\th_gp11_gp11a132_12_熊谷隆我\main.cpp(591): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
-c:\users\zawaw\desktop\gakkou\gp11\th_gp11_gp11a132_12_熊谷隆我\main.cpp(590): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
-c:\users\zawaw\desktop\gakkou\gp11\th_gp11_gp11a132_12_熊谷隆我\main.cpp(619): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
-c:\users\zawaw\desktop\gakkou\gp11\th_gp11_gp11a132_12_熊谷隆我\main.cpp(623): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
-c:\users\zawaw\desktop\gakkou\gp11\th_gp11_gp11a132_12_熊谷隆我\main.cpp(627): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
-c:\users\zawaw\desktop\gakkou\gp11\th_gp11_gp11a132_12_熊谷隆我\main.cpp(631): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
+﻿  attack.cpp
+  bg.cpp
+  camera.cpp
+  effect.cpp
+  enemy.cpp
+  fade.cpp
+  game.cpp
+  hp.cpp
+  input.cpp
+  main.cpp
+C:\Users\zawaw\Desktop\Refactering\unfinished_refactering\RYUGA_KUMAGAI-kadai-8fa9da1aee4f\main.cpp(418,72): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\zawaw\Desktop\Refactering\unfinished_refactering\RYUGA_KUMAGAI-kadai-8fa9da1aee4f\main.cpp(418,53): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\zawaw\Desktop\Refactering\unfinished_refactering\RYUGA_KUMAGAI-kadai-8fa9da1aee4f\main.cpp(417,72): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\zawaw\Desktop\Refactering\unfinished_refactering\RYUGA_KUMAGAI-kadai-8fa9da1aee4f\main.cpp(417,53): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\zawaw\Desktop\Refactering\unfinished_refactering\RYUGA_KUMAGAI-kadai-8fa9da1aee4f\main.cpp(420,59): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\zawaw\Desktop\Refactering\unfinished_refactering\RYUGA_KUMAGAI-kadai-8fa9da1aee4f\main.cpp(420,40): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\zawaw\Desktop\Refactering\unfinished_refactering\RYUGA_KUMAGAI-kadai-8fa9da1aee4f\main.cpp(419,76): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\zawaw\Desktop\Refactering\unfinished_refactering\RYUGA_KUMAGAI-kadai-8fa9da1aee4f\main.cpp(419,57): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\zawaw\Desktop\Refactering\unfinished_refactering\RYUGA_KUMAGAI-kadai-8fa9da1aee4f\main.cpp(527,78): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\zawaw\Desktop\Refactering\unfinished_refactering\RYUGA_KUMAGAI-kadai-8fa9da1aee4f\main.cpp(527,59): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\zawaw\Desktop\Refactering\unfinished_refactering\RYUGA_KUMAGAI-kadai-8fa9da1aee4f\main.cpp(526,78): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\zawaw\Desktop\Refactering\unfinished_refactering\RYUGA_KUMAGAI-kadai-8fa9da1aee4f\main.cpp(526,59): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\zawaw\Desktop\Refactering\unfinished_refactering\RYUGA_KUMAGAI-kadai-8fa9da1aee4f\main.cpp(546,64): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\zawaw\Desktop\Refactering\unfinished_refactering\RYUGA_KUMAGAI-kadai-8fa9da1aee4f\main.cpp(546,46): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\zawaw\Desktop\Refactering\unfinished_refactering\RYUGA_KUMAGAI-kadai-8fa9da1aee4f\main.cpp(545,78): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\zawaw\Desktop\Refactering\unfinished_refactering\RYUGA_KUMAGAI-kadai-8fa9da1aee4f\main.cpp(545,59): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\zawaw\Desktop\Refactering\unfinished_refactering\RYUGA_KUMAGAI-kadai-8fa9da1aee4f\main.cpp(565,64): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\zawaw\Desktop\Refactering\unfinished_refactering\RYUGA_KUMAGAI-kadai-8fa9da1aee4f\main.cpp(565,46): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\zawaw\Desktop\Refactering\unfinished_refactering\RYUGA_KUMAGAI-kadai-8fa9da1aee4f\main.cpp(564,78): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\zawaw\Desktop\Refactering\unfinished_refactering\RYUGA_KUMAGAI-kadai-8fa9da1aee4f\main.cpp(564,59): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\zawaw\Desktop\Refactering\unfinished_refactering\RYUGA_KUMAGAI-kadai-8fa9da1aee4f\main.cpp(595,65): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\zawaw\Desktop\Refactering\unfinished_refactering\RYUGA_KUMAGAI-kadai-8fa9da1aee4f\main.cpp(595,46): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\zawaw\Desktop\Refactering\unfinished_refactering\RYUGA_KUMAGAI-kadai-8fa9da1aee4f\main.cpp(594,78): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\zawaw\Desktop\Refactering\unfinished_refactering\RYUGA_KUMAGAI-kadai-8fa9da1aee4f\main.cpp(594,59): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\zawaw\Desktop\Refactering\unfinished_refactering\RYUGA_KUMAGAI-kadai-8fa9da1aee4f\main.cpp(622,193): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\zawaw\Desktop\Refactering\unfinished_refactering\RYUGA_KUMAGAI-kadai-8fa9da1aee4f\main.cpp(622,175): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\zawaw\Desktop\Refactering\unfinished_refactering\RYUGA_KUMAGAI-kadai-8fa9da1aee4f\main.cpp(626,193): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\zawaw\Desktop\Refactering\unfinished_refactering\RYUGA_KUMAGAI-kadai-8fa9da1aee4f\main.cpp(626,175): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\zawaw\Desktop\Refactering\unfinished_refactering\RYUGA_KUMAGAI-kadai-8fa9da1aee4f\main.cpp(630,193): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\zawaw\Desktop\Refactering\unfinished_refactering\RYUGA_KUMAGAI-kadai-8fa9da1aee4f\main.cpp(630,175): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\zawaw\Desktop\Refactering\unfinished_refactering\RYUGA_KUMAGAI-kadai-8fa9da1aee4f\main.cpp(634,193): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\zawaw\Desktop\Refactering\unfinished_refactering\RYUGA_KUMAGAI-kadai-8fa9da1aee4f\main.cpp(634,175): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
+  object.cpp
+  player.cpp
+  renderer.cpp
+  result.cpp
+  sprite.cpp
+  title.cpp
+  tutorial.cpp
   コード生成しています。
-  3 of 154 functions ( 1.9%) were compiled, the rest were copied from previous compilation.
+  32 of 155 functions (20.6%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
-    1 functions had inline decision re-evaluated but remain unchanged
+    7 functions had inline decision re-evaluated but remain unchanged
   コード生成が終了しました。
-  20200706_sprite.vcxproj -> C:\Users\zawaw\Desktop\gakkou\GP11\TH_GP11_GP11A132_12_熊谷隆我\Release\20200706_sprite.exe
+  20200706_sprite.vcxproj -> C:\Users\zawaw\Desktop\Refactering\unfinished_refactering\RYUGA_KUMAGAI-kadai-8fa9da1aee4f\Release\20200706_sprite.exe

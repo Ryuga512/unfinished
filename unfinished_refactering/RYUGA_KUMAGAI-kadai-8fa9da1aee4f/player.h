@@ -45,6 +45,7 @@ struct PLAYER
     int             atk_delay;
     float           pre_tx;
     int             pre_texNo;
+    bool            pre_dir[4];
     bool            down_z;          // ˆê“x–Ú‚É‰Ÿ‚³‚ê‚½‚Æ‚«true
 };
 
