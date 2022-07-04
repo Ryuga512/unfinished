@@ -288,10 +288,8 @@ bool CreateStencilShadow(D3DXMATRIX world, LIGHT Light, DX11_MODEL *Model)
     }
     ImmediateContext->Unmap(Model->VertexBuffer, 0);
 
-
-
+    delete[] edge;
     /***************************************************/
-
     return true;
 }
 
@@ -304,6 +302,7 @@ void UnloadStencilShadow(DX11_MODEL *Model)
     if (Model->VertexBuffer)	Model->VertexBuffer->Release();
     if (Model->IndexBuffer)		Model->IndexBuffer->Release();
     if (Model->SubsetArray)		delete[] Model->SubsetArray;
+
 }
 
 

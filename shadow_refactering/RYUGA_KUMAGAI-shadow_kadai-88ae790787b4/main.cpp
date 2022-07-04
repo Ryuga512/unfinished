@@ -385,7 +385,6 @@ void HitCheck(void)
         if (player->use == true)// 死んでいたら行わない
         {
 
-            // 敵は複数居ますよね？→for文使うよ
             for (int j = 0; j < MAX_ENEMY; j++)
             {
                 if (enemy[j].use == false) continue;	// 死んでいたら行わない
@@ -437,9 +436,13 @@ void HitCheck(void)
 
             if (HitCheckBC(bullet[i].pos, shadow[enemy[j].shadowIdx].pos, bullet[i].radius, /*shadow[enemy[j].shadowIdx].scl.x*/15.0f))
             {
-                PlaySound(SOUND_LABEL_SE_defend001);
-                enemy[j].stop = true;
-                ReleaseShadow(enemy[j].shadowIdx);
+                if (shadow[enemy[j].shadowIdx].bUse)
+                {
+                    PlaySound(SOUND_LABEL_SE_defend001);
+                    enemy[j].stop = true;
+
+                    ReleaseShadow(enemy[j].shadowIdx);
+                }
             }
         }
     }

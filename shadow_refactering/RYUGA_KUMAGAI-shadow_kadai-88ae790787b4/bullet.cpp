@@ -76,7 +76,7 @@ HRESULT InitBullet(void)
         g_aBullet[nCntBullet].fHeight = BULLET_HEIGHT;
         g_aBullet[nCntBullet].bUse = false;
         g_aBullet[nCntBullet].rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-        g_aBullet[nCntBullet].speed = 1.5f;
+        g_aBullet[nCntBullet].speed = 10.0f;
         g_aBullet[nCntBullet].radius = 3;
     }
 

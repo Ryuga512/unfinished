@@ -1,36 +1,36 @@
 ﻿  bg.cpp
-c:\users\zawaw\desktop\gakkou\gp11\th_gp11_gp11a132_12_熊谷隆我\main.h(17): fatal error C1083: include ファイルを開けません。'd3dx11.h':No such file or directory
+C:\Users\zawaw\Desktop\Refactering\unfinished_refactering\RYUGA_KUMAGAI-kadai-8fa9da1aee4f\main.h(17,10): fatal error C1083: include ファイルを開けません。'd3dx11.h':No such file or directory
   attack.cpp
-c:\users\zawaw\desktop\gakkou\gp11\th_gp11_gp11a132_12_熊谷隆我\main.h(17): fatal error C1083: include ファイルを開けません。'd3dx11.h':No such file or directory
+C:\Users\zawaw\Desktop\Refactering\unfinished_refactering\RYUGA_KUMAGAI-kadai-8fa9da1aee4f\main.h(17,10): fatal error C1083: include ファイルを開けません。'd3dx11.h':No such file or directory
   camera.cpp
-c:\users\zawaw\desktop\gakkou\gp11\th_gp11_gp11a132_12_熊谷隆我\main.h(17): fatal error C1083: include ファイルを開けません。'd3dx11.h':No such file or directory
+C:\Users\zawaw\Desktop\Refactering\unfinished_refactering\RYUGA_KUMAGAI-kadai-8fa9da1aee4f\main.h(17,10): fatal error C1083: include ファイルを開けません。'd3dx11.h':No such file or directory
   effect.cpp
-c:\users\zawaw\desktop\gakkou\gp11\th_gp11_gp11a132_12_熊谷隆我\main.h(17): fatal error C1083: include ファイルを開けません。'd3dx11.h':No such file or directory
+C:\Users\zawaw\Desktop\Refactering\unfinished_refactering\RYUGA_KUMAGAI-kadai-8fa9da1aee4f\main.h(17,10): fatal error C1083: include ファイルを開けません。'd3dx11.h':No such file or directory
   enemy.cpp
-c:\users\zawaw\desktop\gakkou\gp11\th_gp11_gp11a132_12_熊谷隆我\main.h(17): fatal error C1083: include ファイルを開けません。'd3dx11.h':No such file or directory
+C:\Users\zawaw\Desktop\Refactering\unfinished_refactering\RYUGA_KUMAGAI-kadai-8fa9da1aee4f\main.h(17,10): fatal error C1083: include ファイルを開けません。'd3dx11.h':No such file or directory
   fade.cpp
-c:\users\zawaw\desktop\gakkou\gp11\th_gp11_gp11a132_12_熊谷隆我\main.h(17): fatal error C1083: include ファイルを開けません。'd3dx11.h':No such file or directory
+C:\Users\zawaw\Desktop\Refactering\unfinished_refactering\RYUGA_KUMAGAI-kadai-8fa9da1aee4f\main.h(17,10): fatal error C1083: include ファイルを開けません。'd3dx11.h':No such file or directory
   game.cpp
-c:\users\zawaw\desktop\gakkou\gp11\th_gp11_gp11a132_12_熊谷隆我\main.h(17): fatal error C1083: include ファイルを開けません。'd3dx11.h':No such file or directory
+C:\Users\zawaw\Desktop\Refactering\unfinished_refactering\RYUGA_KUMAGAI-kadai-8fa9da1aee4f\main.h(17,10): fatal error C1083: include ファイルを開けません。'd3dx11.h':No such file or directory
   hp.cpp
-c:\users\zawaw\desktop\gakkou\gp11\th_gp11_gp11a132_12_熊谷隆我\main.h(17): fatal error C1083: include ファイルを開けません。'd3dx11.h':No such file or directory
+C:\Users\zawaw\Desktop\Refactering\unfinished_refactering\RYUGA_KUMAGAI-kadai-8fa9da1aee4f\main.h(17,10): fatal error C1083: include ファイルを開けません。'd3dx11.h':No such file or directory
   input.cpp
-c:\users\zawaw\desktop\gakkou\gp11\th_gp11_gp11a132_12_熊谷隆我\main.h(17): fatal error C1083: include ファイルを開けません。'd3dx11.h':No such file or directory
+C:\Users\zawaw\Desktop\Refactering\unfinished_refactering\RYUGA_KUMAGAI-kadai-8fa9da1aee4f\main.h(17,10): fatal error C1083: include ファイルを開けません。'd3dx11.h':No such file or directory
   main.cpp
-c:\users\zawaw\desktop\gakkou\gp11\th_gp11_gp11a132_12_熊谷隆我\main.h(17): fatal error C1083: include ファイルを開けません。'd3dx11.h':No such file or directory
+C:\Users\zawaw\Desktop\Refactering\unfinished_refactering\RYUGA_KUMAGAI-kadai-8fa9da1aee4f\main.h(17,10): fatal error C1083: include ファイルを開けません。'd3dx11.h':No such file or directory
   object.cpp
-c:\users\zawaw\desktop\gakkou\gp11\th_gp11_gp11a132_12_熊谷隆我\main.h(17): fatal error C1083: include ファイルを開けません。'd3dx11.h':No such file or directory
+C:\Users\zawaw\Desktop\Refactering\unfinished_refactering\RYUGA_KUMAGAI-kadai-8fa9da1aee4f\main.h(17,10): fatal error C1083: include ファイルを開けません。'd3dx11.h':No such file or directory
   player.cpp
-c:\users\zawaw\desktop\gakkou\gp11\th_gp11_gp11a132_12_熊谷隆我\main.h(17): fatal error C1083: include ファイルを開けません。'd3dx11.h':No such file or directory
+C:\Users\zawaw\Desktop\Refactering\unfinished_refactering\RYUGA_KUMAGAI-kadai-8fa9da1aee4f\main.h(17,10): fatal error C1083: include ファイルを開けません。'd3dx11.h':No such file or directory
   renderer.cpp
-c:\users\zawaw\desktop\gakkou\gp11\th_gp11_gp11a132_12_熊谷隆我\main.h(17): fatal error C1083: include ファイルを開けません。'd3dx11.h':No such file or directory
+C:\Users\zawaw\Desktop\Refactering\unfinished_refactering\RYUGA_KUMAGAI-kadai-8fa9da1aee4f\main.h(17,10): fatal error C1083: include ファイルを開けません。'd3dx11.h':No such file or directory
   result.cpp
-c:\users\zawaw\desktop\gakkou\gp11\th_gp11_gp11a132_12_熊谷隆我\main.h(17): fatal error C1083: include ファイルを開けません。'd3dx11.h':No such file or directory
+C:\Users\zawaw\Desktop\Refactering\unfinished_refactering\RYUGA_KUMAGAI-kadai-8fa9da1aee4f\main.h(17,10): fatal error C1083: include ファイルを開けません。'd3dx11.h':No such file or directory
   sound.cpp
   sprite.cpp
-c:\users\zawaw\desktop\gakkou\gp11\th_gp11_gp11a132_12_熊谷隆我\main.h(17): fatal error C1083: include ファイルを開けません。'd3dx11.h':No such file or directory
+C:\Users\zawaw\Desktop\Refactering\unfinished_refactering\RYUGA_KUMAGAI-kadai-8fa9da1aee4f\main.h(17,10): fatal error C1083: include ファイルを開けません。'd3dx11.h':No such file or directory
   title.cpp
-c:\users\zawaw\desktop\gakkou\gp11\th_gp11_gp11a132_12_熊谷隆我\main.h(17): fatal error C1083: include ファイルを開けません。'd3dx11.h':No such file or directory
+C:\Users\zawaw\Desktop\Refactering\unfinished_refactering\RYUGA_KUMAGAI-kadai-8fa9da1aee4f\main.h(17,10): fatal error C1083: include ファイルを開けません。'd3dx11.h':No such file or directory
   tutorial.cpp
-c:\users\zawaw\desktop\gakkou\gp11\th_gp11_gp11a132_12_熊谷隆我\main.h(17): fatal error C1083: include ファイルを開けません。'd3dx11.h':No such file or directory
+C:\Users\zawaw\Desktop\Refactering\unfinished_refactering\RYUGA_KUMAGAI-kadai-8fa9da1aee4f\main.h(17,10): fatal error C1083: include ファイルを開けません。'd3dx11.h':No such file or directory
   コードを生成中...
