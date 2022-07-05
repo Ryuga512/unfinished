@@ -4,13 +4,14 @@
 // Author : GP11A132 12 åFíJó≤â‰
 //
 //=============================================================================
+#pragma once
 #include "main.h"
 #include "input.h"
 #include "camera.h"
 #include "shadow.h"
 #include "bullet.h"
 #include "main.h"
-
+#include "StencilShadow.h"
 //*****************************************************************************
 // É}ÉNÉçíËã`
 //*****************************************************************************
@@ -121,8 +122,6 @@ void UpdateBullet(void)
             g_aBullet[nCntBullet].pos.z += cosf(g_aBullet[nCntBullet].rot.y) * g_aBullet[nCntBullet].speed;
             g_aBullet[nCntBullet].pos.y += sinf(g_aBullet[nCntBullet].rot.x) * g_aBullet[nCntBullet].speed;
 
-            // âeÇÃà íuê›íË
-            SetPositionShadow(g_aBullet[nCntBullet].nIdxShadow, D3DXVECTOR3(g_aBullet[nCntBullet].pos.x, 0.1f, g_aBullet[nCntBullet].pos.z));
         
             if (g_aBullet[nCntBullet].pos.x < WALL_LEFT
                 || g_aBullet[nCntBullet].pos.x > WALL_RIGHT
@@ -270,9 +269,6 @@ int SetBullet(D3DXVECTOR3 pos, D3DXVECTOR3 rot)
             g_aBullet[nCntBullet].rot = rot;
             g_aBullet[nCntBullet].scl = D3DXVECTOR3(1.0f, 1.0f, 1.0f);
             g_aBullet[nCntBullet].bUse = true;
-
-            // âeÇÃê›íË
-            g_aBullet[nCntBullet].nIdxShadow = CreateShadow(g_aBullet[nCntBullet].pos, 0.5f, 0.5f);
 
             nIdxBullet = nCntBullet;
 

@@ -4,6 +4,7 @@
 // Author : GP11A132 12 熊谷隆我
 //
 //=============================================================================
+#pragma once
 #include "main.h"
 #include "renderer.h"
 #include "input.h"
@@ -369,15 +370,152 @@ bool HitCheckBB(D3DXVECTOR3 mpos, float mhw, float mhh, D3DXVECTOR3 ypos, float 
     return ans;
 }
 
+bool HitCheckBB3D(D3DXVECTOR3 mpos, float mx, float my, float mz, D3DXVECTOR3 ypos, float yx, float yy, float yz)
+{
+    bool ans = false;
+
+    if ((mpos.x + mx / 2 > ypos.x - yx / 2) &&
+        (mpos.x - mx / 2 < ypos.x + yy / 2) &&
+        (mpos.z + mz / 2 > ypos.z - yz / 2) &&
+        (mpos.z - mz / 2 < ypos.z + yz / 2) &&
+        (mpos.y - my / 2 < ypos.y + yy / 2) &&
+        (mpos.y + my / 2 > ypos.y - yy / 2))
+    {
+        ans = true;
+    }
+    return ans;
+}
+
+bool HitCheckOBB(BULLET* model_bullet, STENCIL_SHADOW* model_enemy)
+{
+    model_bullet->BBox.LengthX = model_bullet->fWidth / 2;
+    model_bullet->BBox.LengthY = 1.0f;
+    model_bullet->BBox.LengthX = model_bullet->fHeight / 2;
+
+    LPDIRECT3DVERTEXBUFFER9 pVB = NULL;
+    VOID* pVertices = NULL;
+    D3DXVECTOR3 Max, Min;
+    UINT stride = sizeof(VERTEX_3D);
+
+    // メッシュ内頂点位置の最大と最小を検索する
+    D3DXComputeBoundingBox((D3DXVECTOR3*)pVertices, model_enemy->model.VertexNum,
+        stride, &Min, &Max);
+
+    //軸ベクトル 軸の長さ（この場合ボックスの各半径）を初期化する
+    model_enemy->BBox.LengthX = (Max.x - Min.x) / 2;
+    model_enemy->BBox.LengthY = 0.1f;
+    model_enemy->BBox.LengthX = (Max.z - Min.z) / 2;
+         
+    D3DXVECTOR3 distance = model_enemy->pos - model_bullet->pos;
+
+    D3DXVECTOR3 separate;
+
+    //それぞれのローカル基底軸ベクトルに、それぞれの回転を反映させる
+    model_bullet->BBox.AxisX = D3DXVECTOR3(1, 0, 0);
+    model_bullet->BBox.AxisY = D3DXVECTOR3(0, 1, 0);
+    model_bullet->BBox.AxisZ = D3DXVECTOR3(0, 0, 1);
+
+    model_enemy->BBox.AxisX = D3DXVECTOR3(1, 0, 0);
+    model_enemy->BBox.AxisY = D3DXVECTOR3(0, 1, 0);
+    model_enemy->BBox.AxisZ = D3DXVECTOR3(0, 0, 1);
+
+    D3DXVec3TransformCoord(&model_bullet->BBox.AxisX,&model_bullet->BBox.AxisX, &model_bullet->mtxWorld);                                             
+    D3DXVec3TransformCoord(&model_bullet->BBox.AxisY,&model_bullet->BBox.AxisY, &model_bullet->mtxWorld);
+    D3DXVec3TransformCoord(&model_bullet->BBox.AxisZ,&model_bullet->BBox.AxisZ, &model_bullet->mtxWorld);
+
+    D3DXVec3TransformCoord(&model_enemy->BBox.AxisX, &model_enemy->BBox.AxisX, &model_enemy->mtxWorld);
+    D3DXVec3TransformCoord(&model_enemy->BBox.AxisY, &model_enemy->BBox.AxisY, &model_enemy->mtxWorld);
+    D3DXVec3TransformCoord(&model_enemy->BBox.AxisZ, &model_enemy->BBox.AxisZ, &model_enemy->mtxWorld);
+
+    	//ボックスAのローカル基底軸を基準にした、”影”の算出（3パターン）
+	{		
+		//X軸を分離軸とした場合
+		if(!CompareLength(&model_bullet->BBox,&model_enemy->BBox,&model_bullet->BBox.AxisX,&distance)) return false;
+		//Y軸を分離軸とした場合
+		if(!CompareLength(&model_bullet->BBox,&model_enemy->BBox,&model_bullet->BBox.AxisY,&distance)) return false;
+		//Z軸を分離軸とした場合
+		if(!CompareLength(&model_bullet->BBox,&model_enemy->BBox,&model_bullet->BBox.AxisZ,&distance)) return false;
+	}
+    {
+        //X軸を分離軸とした場合
+        if (!CompareLength(&model_bullet->BBox, &model_enemy->BBox, &model_enemy->BBox.AxisX, &distance)) return false;
+        //Y軸を分離軸とした場合
+        if (!CompareLength(&model_bullet->BBox, &model_enemy->BBox, &model_enemy->BBox.AxisY, &distance)) return false;
+        //Z軸を分離軸とした場合
+        if (!CompareLength(&model_bullet->BBox, &model_enemy->BBox, &model_enemy->BBox.AxisZ, &distance)) return false;
+    }
+
+    //お互いの基底軸同士の外積ベクトルを基準にした、”影”の算出（9パターン）
+    {
+        //ボックスAのX軸
+        {
+            //と　ボックスBのX軸との外積ベクトルを分離軸とした場合
+            D3DXVec3Cross(&separate, &model_bullet->BBox.AxisX, &model_enemy->BBox.AxisX);
+            if (!CompareLength(&model_bullet->BBox, &model_enemy->BBox, &separate, &distance)) return false;
+            //と　ボックスBのY軸との外積ベクトルを分離軸とした場合
+            D3DXVec3Cross(&separate, &model_bullet->BBox.AxisX, &model_enemy->BBox.AxisY);
+            if (!CompareLength(&model_bullet->BBox, &model_enemy->BBox, &separate, &distance)) return false;
+            //と　ボックスBのZ軸との外積ベクトルを分離軸とした場合
+            D3DXVec3Cross(&separate, &model_bullet->BBox.AxisX, &model_enemy->BBox.AxisZ);
+            if (!CompareLength(&model_bullet->BBox, &model_enemy->BBox, &separate, &distance)) return false;
+        }
+        //ボックスAのY軸
+        {
+            //と　ボックスBのX軸との外積ベクトルを分離軸とした場合
+            D3DXVec3Cross(&separate, &model_bullet->BBox.AxisY, &model_enemy->BBox.AxisX);
+            if (!CompareLength(&model_bullet->BBox, &model_enemy->BBox, &separate, &distance)) return false;
+            //と　ボックスBのY軸との外積ベクトルを分離軸とした場合
+            D3DXVec3Cross(&separate, &model_bullet->BBox.AxisY, &model_enemy->BBox.AxisY);
+            if (!CompareLength(&model_bullet->BBox, &model_enemy->BBox, &separate, &distance)) return false;
+            //と　ボックスBのZ軸との外積ベクトルを分離軸とした場合
+            D3DXVec3Cross(&separate, &model_bullet->BBox.AxisY, &model_enemy->BBox.AxisZ);
+            if (!CompareLength(&model_bullet->BBox, &model_enemy->BBox, &separate, &distance)) return false;
+        }
+        //ボックスAのZ軸
+        {
+            //と　ボックスBのX軸との外積ベクトルを分離軸とした場合
+            D3DXVec3Cross(&separate, &model_bullet->BBox.AxisZ, &model_enemy->BBox.AxisX);
+            if (!CompareLength(&model_bullet->BBox, &model_enemy->BBox, &separate, &distance)) return false;
+            //と　ボックスBのY軸との外積ベクトルを分離軸とした場合
+            D3DXVec3Cross(&separate, &model_bullet->BBox.AxisZ, &model_enemy->BBox.AxisY);
+            if (!CompareLength(&model_bullet->BBox, &model_enemy->BBox, &separate, &distance)) return false;
+            //と　ボックスBのZ軸との外積ベクトルを分離軸とした場合
+            D3DXVec3Cross(&separate, &model_bullet->BBox.AxisZ, &model_enemy->BBox.AxisZ);
+            if (!CompareLength(&model_bullet->BBox, &model_enemy->BBox, &separate, &distance)) return false;
+        }
+    }
+
+    return true;
+
+}
+bool CompareLength(BBOX* box_a, BBOX* box_b, D3DXVECTOR3* separate, D3DXVECTOR3* distance)
+{
+    float f_distance = fabsf(D3DXVec3Dot(distance, separate));
+    float f_shadow_a = 0;
+    float f_shadow_b = 0;
+
+    f_shadow_a = fabsf(D3DXVec3Dot(&box_a->AxisX, separate) * box_a->LengthX) +
+                 fabsf(D3DXVec3Dot(&box_a->AxisY, separate) * box_a->LengthY) +
+                 fabsf(D3DXVec3Dot(&box_a->AxisZ, separate) * box_a->LengthZ);
+
+    f_shadow_b = fabsf(D3DXVec3Dot(&box_b->AxisX, separate) * box_b->LengthX) +
+                 fabsf(D3DXVec3Dot(&box_b->AxisY, separate) * box_b->LengthY) +
+                 fabsf(D3DXVec3Dot(&box_b->AxisZ, separate) * box_b->LengthZ);
+
+    if (f_distance > f_shadow_a + f_shadow_b)
+    {
+        return false;
+    }
+    return true;
+}
 //=============================================================================
 // 当たり判定処理
 //=============================================================================
-void HitCheck(void)
+void HitCheck(D3DXVECTOR3 light_position)
 {
     PLAYER *player = GetPlayer();
     ENEMY  *enemy = GetEnemy();
     BULLET *bullet = GetBullet();
-    SHADOW *shadow = GetShadow();
 
     // プレイヤーと敵との当たり判定
     //for (int i = 0; i < MAX_PLAYER; i++)
@@ -432,11 +570,12 @@ void HitCheck(void)
         if (!bullet[i].bUse)continue;
         for (int j = 0; j < MAX_ENEMY; j++)
         {
-            if (!enemy[j].use) continue;
+            if (!enemy[j].use || enemy[j].stop) continue;
 
-            if (HitCheckBC(bullet[i].pos, shadow[enemy[j].shadowIdx].pos, bullet[i].radius, /*shadow[enemy[j].shadowIdx].scl.x*/15.0f))
+            //if (HitCheckBB3D(bullet[i].pos, bullet[i].fWidth/3, 0.5f, bullet[i].fWidth/3, shadow[enemy[j].shadowIdx].pos - D3DXVECTOR3(light_position.x, 0.0f, light_position.z) * 50, shadow[enemy[j].shadowIdx].scl.x + light_position.x * 100, 0.2f, shadow[enemy[j].shadowIdx].scl.z + light_position.z * 100)) //最適化中             
+            if(HitCheckOBB(&bullet[i], &g_shadow[enemy[j].shadowIdx]))
             {
-                if (shadow[enemy[j].shadowIdx].bUse)
+                if (g_shadow[enemy[j].shadowIdx].bUse)
                 {
                     PlaySound(SOUND_LABEL_SE_defend001);
                     enemy[j].stop = true;
@@ -447,6 +586,7 @@ void HitCheck(void)
         }
     }
 }
+
 
 
 //=============================================================================

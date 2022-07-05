@@ -4,6 +4,8 @@
 // Author : 
 //
 //=============================================================================
+#pragma once
+
 #include "title.h"
 #include "input.h"
 #include "fade.h"

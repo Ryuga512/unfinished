@@ -4,6 +4,8 @@
 // Author : GP11A132 12 熊谷隆我
 //
 //=============================================================================
+#pragma once
+
 #include "main.h"
 #include "input.h"
 #include "camera.h"
@@ -36,7 +38,6 @@
 //*****************************************************************************
 static PLAYER				g_Player;	// プレイヤー
 static PLAYER				g_Parts[PLAYER_PARTS_MAX];		// プレイヤーのパーツ用
-static DX11_MODEL           g_Shadow;
 float roty = D3DX_PI;
 
 
@@ -46,7 +47,7 @@ float roty = D3DX_PI;
 HRESULT InitPlayer(void)
 {
 	LoadModel(MODEL_PLAYER, &g_Player.model);
-    InitStencilShadow(MODEL_PLAYER, &g_Shadow);
+    InitStencilShadow(MODEL_PLAYER, &g_shadow[MAX_STENCIL_SHADOW]);
 	g_Player.pos = D3DXVECTOR3(0.0f, 7.0f, -50.0f);
 	g_Player.rot = D3DXVECTOR3(0.0f, D3DX_PI, 0.0f);
 	g_Player.scl = D3DXVECTOR3(1.0f, 1.0f, 1.0f);
@@ -57,7 +58,7 @@ HRESULT InitPlayer(void)
 
 	D3DXVECTOR3 pos = g_Player.pos;
 	pos.y = 0.0f;
-	g_Player.shadowIdx = CreateShadow(pos, PLAYER_SHADOW_SIZE, PLAYER_SHADOW_SIZE);
+    g_Player.shadowIdx = MAX_STENCIL_SHADOW;
 
     g_Player.use = true;
 
@@ -74,7 +75,7 @@ void UninitPlayer(void)
 {
 	// モデルの解放処理
 	UnloadModel(&g_Player.model);
-    UnloadStencilShadow(&g_Shadow);
+    UnloadStencilShadow(&g_shadow[MAX_STENCIL_SHADOW]);
 }
 
 //=============================================================================
@@ -175,6 +176,7 @@ void UpdatePlayer(void)
         SetBullet(g_Player.pos, D3DXVECTOR3(cam->rot.x, cam->rot.y, cam->rot.z));
 	}
 
+    SetPositionShadow(MAX_STENCIL_SHADOW, g_Player.pos);
 
 }
 
@@ -218,8 +220,8 @@ void DrawPlayer(void)
     LIGHT *Light = GetLight();
 
     //影描画
-    CreateStencilShadow(g_Player.mtxWorld, *Light, &g_Shadow);
-    DrawStencilShadow(&g_Shadow, g_Player.mtxWorld);
+    CreateStencilShadow(g_Player.mtxWorld, *Light, &g_shadow[MAX_STENCIL_SHADOW]);
+    DrawStencilShadow(&g_shadow[MAX_STENCIL_SHADOW], g_Player.mtxWorld);
 
     // 階層アニメーション
     for (int i = 0; i < PLAYER_PARTS_MAX; i++)

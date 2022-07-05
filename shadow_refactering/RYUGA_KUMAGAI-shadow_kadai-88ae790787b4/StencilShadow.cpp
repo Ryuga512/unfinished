@@ -4,6 +4,8 @@
 // Author : 
 //
 //=============================================================================
+#pragma once
+
 #define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>
 #include "main.h"
@@ -13,6 +15,7 @@
 #include "main.h"
 #include "player.h"
 #include "sprite.h"
+#include "shadow.h"
 //*****************************************************************************
 // マクロ定義
 //*****************************************************************************
@@ -44,22 +47,18 @@ struct CBUFF_PER_MATERIAL//マテリアル単位で渡す情報
 //*****************************************************************************
 ID3D11DeviceContext* ImmediateContext;
 ID3D11Device* D3DDevice;
-MODEL g_model;
 ID3D11DepthStencilState* m_pDSState;
 ID3D11DepthStencilState* m_pDSState2;
 ID3D11BlendState* m_pBlendState;
 ID3D11Buffer* m_pVertexBuffer;//画面を蔽うポリゴン用
 ID3D11Buffer* VertexBuffer;
 ID3D11Buffer* m_pCBuffPerMaterial;
-D3DXVECTOR3 pos;
-D3DXVECTOR3 rot;
-D3DXVECTOR3 scl;
 DWORD id[2][2];
 int NumVertices = 0;
 
-bool InitStencilShadow(char *FileName, DX11_MODEL *Model)
+bool InitStencilShadow(char *FileName, STENCIL_SHADOW *shadow)
 {
-    LoadObj(FileName, &g_model);
+    LoadObj(FileName, &shadow->model);
 
     {
         //ボリュームメッシュ用のバーテックスバッファーを作成
@@ -72,9 +71,9 @@ bool InitStencilShadow(char *FileName, DX11_MODEL *Model)
 
         //D3D11_SUBRESOURCE_DATA sd;
         //ZeroMemory(&sd, sizeof(sd));
-        //sd.pSysMem = g_model.VertexArray;
+        //sd.pSysMem = shadow->model.VertexArray;
 
-        GetDevice()->CreateBuffer(&bd, /*&sd*/NULL, &Model->VertexBuffer);
+        GetDevice()->CreateBuffer(&bd, /*&sd*/NULL, &shadow->dx_model.VertexBuffer);
     }
 
     // インデックスバッファ生成
@@ -82,39 +81,39 @@ bool InitStencilShadow(char *FileName, DX11_MODEL *Model)
         D3D11_BUFFER_DESC bd;
         ZeroMemory(&bd, sizeof(bd));
         bd.Usage = D3D11_USAGE_DYNAMIC;
-        bd.ByteWidth = sizeof(unsigned short) * g_model.IndexNum;
+        bd.ByteWidth = sizeof(unsigned short) * shadow->model.IndexNum;
         bd.BindFlags = D3D11_BIND_INDEX_BUFFER;
         bd.CPUAccessFlags = 0;
 
         D3D11_SUBRESOURCE_DATA sd;
         ZeroMemory(&sd, sizeof(sd));
-        sd.pSysMem = g_model.IndexArray;
+        sd.pSysMem = shadow->model.IndexArray;
 
-        GetDevice()->CreateBuffer(&bd, &sd, &Model->IndexBuffer);
+        GetDevice()->CreateBuffer(&bd, &sd, &shadow->dx_model.IndexBuffer);
     }
 
     // サブセット設定
     {
-        Model->SubsetArray = new DX11_SUBSET[g_model.SubsetNum];
-        Model->SubsetNum = g_model.SubsetNum;
+        shadow->dx_model.SubsetArray = new DX11_SUBSET[shadow->model.SubsetNum];
+        shadow->dx_model.SubsetNum = shadow->model.SubsetNum;
 
-        for (unsigned short i = 0; i < g_model.SubsetNum; i++)
+        for (unsigned short i = 0; i < shadow->model.SubsetNum; i++)
         {
-            Model->SubsetArray[i].StartIndex = g_model.SubsetArray[i].StartIndex;
-            Model->SubsetArray[i].IndexNum = g_model.SubsetArray[i].IndexNum;
+            shadow->dx_model.SubsetArray[i].StartIndex = shadow->model.SubsetArray[i].StartIndex;
+            shadow->dx_model.SubsetArray[i].IndexNum = shadow->model.SubsetArray[i].IndexNum;
 
-            Model->SubsetArray[i].Material.Material = g_model.SubsetArray[i].Material.Material;
-            Model->SubsetArray[i].Material.Material.Diffuse = D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.0f);
+            shadow->dx_model.SubsetArray[i].Material.Material = shadow->model.SubsetArray[i].Material.Material;
+            shadow->dx_model.SubsetArray[i].Material.Material.Diffuse = D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.0f);
 
             D3DX11CreateShaderResourceViewFromFile(GetDevice(),
-                                                   g_model.SubsetArray[i].Material.TextureName,
+                                                   shadow->model.SubsetArray[i].Material.TextureName,
                                                    NULL,
                                                    NULL,
-                                                   &Model->SubsetArray[i].Material.Texture,
+                                                   &shadow->dx_model.SubsetArray[i].Material.Texture,
                                                    NULL);
         }
     }
-
+    shadow->bUse = true;
     return true;
 }
 
@@ -214,7 +213,7 @@ bool InitStencilShadow(void)
     return true;
 }
 
-bool CreateStencilShadow(D3DXMATRIX world, LIGHT Light, DX11_MODEL *Model)
+bool CreateStencilShadow(D3DXMATRIX world, LIGHT Light, STENCIL_SHADOW *shadow)
 {
     D3D11_MAPPED_SUBRESOURCE SubR;
     D3DXVECTOR3 vertex0, vertex1, vertex2, vertex3;
@@ -228,21 +227,21 @@ bool CreateStencilShadow(D3DXMATRIX world, LIGHT Light, DX11_MODEL *Model)
 
     D3DXVec3TransformCoord(&dir, &dir, &inv);
 
-    int *edge = new int[g_model.VertexNum * 4];
+    int *edge = new int[shadow->model.VertexNum * 4];
     int Edges = 0;
 
     /**********************************************************************/
     //～矩形引き伸ばし最適化後編～
     /**********************************************************************/
     //全頂点について、引き延ばしを検討
-    ImmediateContext->Map(Model->VertexBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &SubR);
+    ImmediateContext->Map(shadow->dx_model.VertexBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &SubR);
     VERTEX_3D* model = (VERTEX_3D*)SubR.pData;
-    for (int i = 0; i < g_model.VertexNum - 3; i += 3)
+    for (int i = 0; i < shadow->model.VertexNum - 3; i += 3)
     {
         //頂点を３つ使い、面の法線を求める
-        vertex0 = g_model.VertexArray[i + 0].Position;
-        vertex1 = g_model.VertexArray[i + 1].Position;
-        vertex2 = g_model.VertexArray[i + 2].Position;
+        vertex0 = shadow->model.VertexArray[i + 0].Position;
+        vertex1 = shadow->model.VertexArray[i + 1].Position;
+        vertex2 = shadow->model.VertexArray[i + 2].Position;
 
 
         D3DXVECTOR3 Normal;
@@ -254,14 +253,14 @@ bool CreateStencilShadow(D3DXMATRIX world, LIGHT Light, DX11_MODEL *Model)
         //ポリゴンの裏側なのかを判定&辺を抽出
         if (D3DXVec3Dot(&Normal, &dir) <= 0 && D3DXVec3Dot(&Normal, &dir) > -1.0)
         {
-            edge[Edges + 0] = g_model.IndexArray[i + 0];
-            edge[Edges + 1] = g_model.IndexArray[i + 1];
+            edge[Edges + 0] = shadow->model.IndexArray[i + 0];
+            edge[Edges + 1] = shadow->model.IndexArray[i + 1];
 
-            edge[Edges + 2] = g_model.IndexArray[i + 1];
-            edge[Edges + 3] = g_model.IndexArray[i + 2];
+            edge[Edges + 2] = shadow->model.IndexArray[i + 1];
+            edge[Edges + 3] = shadow->model.IndexArray[i + 2];
 
-            edge[Edges + 4] = g_model.IndexArray[i + 2];
-            edge[Edges + 5] = g_model.IndexArray[i + 0];
+            edge[Edges + 4] = shadow->model.IndexArray[i + 2];
+            edge[Edges + 5] = shadow->model.IndexArray[i + 0];
 
             Edges += 6;
 
@@ -271,8 +270,8 @@ bool CreateStencilShadow(D3DXMATRIX world, LIGHT Light, DX11_MODEL *Model)
     dir = -dir;
     for (DWORD i = 0; i < Edges - 6; i += 2)
     {
-        vertex0 = g_model.VertexArray[edge[i + 0]].Position + g_model.VertexArray[edge[i + 0]].Normal * 0.05f;
-        vertex1 = g_model.VertexArray[edge[i + 1]].Position + g_model.VertexArray[edge[i + 1]].Normal * 0.05f;
+        vertex0 = shadow->model.VertexArray[edge[i + 0]].Position + shadow->model.VertexArray[edge[i + 0]].Normal * 0.05f;
+        vertex1 = shadow->model.VertexArray[edge[i + 1]].Position + shadow->model.VertexArray[edge[i + 1]].Normal * 0.05f;
         vertex2 = vertex0 + dir * 10000;
         vertex3 = vertex1 + dir * 10000;
 
@@ -286,7 +285,7 @@ bool CreateStencilShadow(D3DXMATRIX world, LIGHT Light, DX11_MODEL *Model)
 
         NumVertices += 6;
     }
-    ImmediateContext->Unmap(Model->VertexBuffer, 0);
+    ImmediateContext->Unmap(shadow->dx_model.VertexBuffer, 0);
 
     delete[] edge;
     /***************************************************/
@@ -297,11 +296,11 @@ bool CreateStencilShadow(D3DXMATRIX world, LIGHT Light, DX11_MODEL *Model)
 //=============================================================================
 // 終了処理
 //=============================================================================
-void UnloadStencilShadow(DX11_MODEL *Model)
+void UnloadStencilShadow(STENCIL_SHADOW *shadow)
 {
-    if (Model->VertexBuffer)	Model->VertexBuffer->Release();
-    if (Model->IndexBuffer)		Model->IndexBuffer->Release();
-    if (Model->SubsetArray)		delete[] Model->SubsetArray;
+    if (shadow->dx_model.VertexBuffer)	shadow->dx_model.VertexBuffer->Release();
+    if (shadow->dx_model.IndexBuffer)		shadow->dx_model.IndexBuffer->Release();
+    if (shadow->dx_model.SubsetArray)		delete[] shadow->dx_model.SubsetArray;
 
 }
 
@@ -309,7 +308,7 @@ void UnloadStencilShadow(DX11_MODEL *Model)
 //=============================================================================
 // 描画処理
 //=============================================================================
-void DrawStencilShadow(DX11_MODEL *Model, D3DXMATRIX mtxWorld)
+void DrawStencilShadow(STENCIL_SHADOW* shadow, D3DXMATRIX mtxWorld)
 {
     PLAYER *Player = GetPlayer();
     LIGHT *Light = GetLight();
@@ -324,17 +323,32 @@ void DrawStencilShadow(DX11_MODEL *Model, D3DXMATRIX mtxWorld)
     //バーテックスバッファーをセット
     UINT stride = sizeof(VERTEX_3D);
     UINT offset = 0;
-
+    shadow->mtxWorld = mtxWorld;
     // ワールドマトリックスの設定
-    SetWorldMatrix(&mtxWorld);
-    //SetMaterial(Model->SubsetArray->Material.Material);
+    SetWorldMatrix(&shadow->mtxWorld);
+    //SetMaterial(shadow->dx_model.SubsetArray->Material.Material);
     //DrawModel(Model);
-    ImmediateContext->IASetVertexBuffers(0, 1, &Model->VertexBuffer, &stride, &offset);
+    ImmediateContext->IASetVertexBuffers(0, 1, &shadow->dx_model.VertexBuffer, &stride, &offset);
     ImmediateContext->Draw(NumVertices, 0);
 
     // レンダリングステートを元に戻す
     ImmediateContext->OMSetDepthStencilState(pCurrentDSState, Num);
 
+}
+//=============================================================================
+// 位置の設定
+//=============================================================================
+void SetPositionShadow(int nIdxShadow, D3DXVECTOR3 pos)
+{
+    g_shadow[nIdxShadow].pos = pos;
+}
+
+void ReleaseShadow(int nIdxShadow)
+{
+    if (nIdxShadow >= 0 && nIdxShadow < MAX_STENCIL_SHADOW)
+    {
+        g_shadow[nIdxShadow].bUse = false;
+    }
 }
 
 void polygon(void)

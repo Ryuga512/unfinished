@@ -23,7 +23,7 @@ struct ENEMY
 	D3DXVECTOR3			pos;				// モデルの位置
 	D3DXVECTOR3			rot;				// モデルの向き(回転)
 	D3DXVECTOR3			scl;				// モデルの大きさ(スケール)
-
+	BBOX				BBox;
 	float				spd;				// 移動スピード
 
 	DX11_MODEL			model;				// モデル情報

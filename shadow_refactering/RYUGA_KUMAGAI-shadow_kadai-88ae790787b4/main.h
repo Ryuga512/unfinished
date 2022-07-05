@@ -6,7 +6,6 @@
 //=============================================================================
 #pragma once
 
-
 #pragma warning(push)
 #pragma warning(disable:4005)
 
@@ -59,7 +58,8 @@ struct INTERPOLATION_DATA
     D3DXVECTOR3 scl;		// 拡大縮小(親の拡縮に対して自分を拡縮)
     float		frame;		// 実行フレーム数 ( dt = 1.0f/frame )
 };
-
+typedef struct ENEMY;
+typedef struct BULLET;
 typedef enum
 {
     MODE_TITLE = 0,							// タイトル画面
@@ -68,14 +68,36 @@ typedef enum
     MODE_MAX
 } MODE;
 
+struct BBOX
+{
+	D3DXVECTOR3 Max;
+	D3DXVECTOR3 Min;
+	D3DXVECTOR3 AxisX;		//軸
+	D3DXVECTOR3 AxisY;
+	D3DXVECTOR3 AxisZ;
+	FLOAT LengthX;
+	FLOAT LengthY;
+	FLOAT LengthZ;
+	BBOX()
+	{
+		ZeroMemory(this, sizeof(BBOX));
+		AxisX = D3DXVECTOR3(1, 0, 0);
+		AxisY = D3DXVECTOR3(0, 1, 0);
+		AxisZ = D3DXVECTOR3(0, 0, 1);
+	}
+};
+
 //*****************************************************************************
 // プロトタイプ宣言
 //*****************************************************************************
 long GetMousePosX(void);
 long GetMousePosY(void);
 char* GetDebugStr(void);
-void HitCheck(void);
+void HitCheck(D3DXVECTOR3 light_position);
 bool HitCheckBC(D3DXVECTOR3 pos1, D3DXVECTOR3 pos2, float size1, float size2);
 bool HitCheckBB(D3DXVECTOR3 mpos, float mhw, float mhh, D3DXVECTOR3 ypos, float yhw, float yhh);
+bool HitCheckBB3D(D3DXVECTOR3 mpos, float mx, float my, float mz, D3DXVECTOR3 ypos, float yx, float yy, float yz);
+bool HitCheckOBB(BULLET* model_bullet, ENEMY* model_enemy);
+bool CompareLength(BBOX* box_a, BBOX* box_b, D3DXVECTOR3* separate, D3DXVECTOR3* distance);
 void SetMode(MODE mode);
 MODE GetMode(void);

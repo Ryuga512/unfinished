@@ -8,7 +8,7 @@
 
 #define	MAX_BULLET			(10)			// 弾最大数
 
-typedef struct
+struct BULLET
 {
     D3DXMATRIX	mtxWorld;		// ワールドマトリックス
     D3DXVECTOR3 pos;			// 位置
@@ -21,7 +21,8 @@ typedef struct
     float       speed;
     float       radius;
     D3DXVECTOR3 rot;
-} BULLET;
+    BBOX        BBox;
+};
 
 //*****************************************************************************
 // プロトタイプ宣言

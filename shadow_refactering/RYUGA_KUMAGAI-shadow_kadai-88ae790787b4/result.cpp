@@ -4,6 +4,8 @@
 // Author : GP11A132 12 ŒF’J—²‰ä
 //
 //=============================================================================
+#pragma once
+
 #include "result.h"
 #include "input.h"
 #include "fade.h"

@@ -4,6 +4,7 @@
 // Author : 
 //
 //=============================================================================
+#pragma once
 #include "game.h"
 #include "renderer.h"
 #include "camera.h"
@@ -33,9 +34,8 @@
 //*****************************************************************************
 // グローバル変数
 //*****************************************************************************
-float x = 0.0f; //ライトの座標
-float y = 0.0f;
-float z = 0.0f;
+D3DXVECTOR3 light_pos;//ライトの座標
+
 bool flg = true; //足すときtrue
 int time = 0;
 
@@ -45,9 +45,7 @@ int time = 0;
 HRESULT InitGame(void)
 {
     time = 0;
-    x = 0;
-    y = 0;
-    z = 0;
+    light_pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
     InitStencilShadow();
 
     InitScore();
@@ -55,8 +53,8 @@ HRESULT InitGame(void)
     //弾の初期化
     InitBullet();
 
-    //影の初期化
-    InitShadow();
+    ////影の初期化
+    //InitShadow();
 
     // プレイヤーの初期化
     InitPlayer();
@@ -64,7 +62,7 @@ HRESULT InitGame(void)
     // エネミーの初期化
     InitEnemy();
 
-    InitTree();
+    //InitTree();
 
     //InitParticle();
 
@@ -119,15 +117,15 @@ void UninitGame(void)
 
     //UninitParticle();
 
-    UninitTree();
+    //UninitTree();
 
     UninitBullet();
 
     // プレイヤーの終了処理
     UninitPlayer();
 
-    // 影の終了処理
-    UninitShadow();
+    //// 影の終了処理
+    //UninitShadow();
 
     // カメラの終了処理
     UninitCamera();
@@ -139,26 +137,26 @@ void UninitGame(void)
 void UpdateGame(void)
 {
     time++;
-    if (x >= 80)
+    if (light_pos.x >= 80)
     {
         flg = false;
     }
-    else if (x <= -80)
+    else if (light_pos.x <= -80)
     {
         flg = true;
     }
 
     if (flg)
     {
-        x += 0.001f;
-        y += 0.001f;
-        z += 0.001f;
+        light_pos.x += 0.001f;
+        light_pos.y += 0.001f;
+        light_pos.z += 0.001f;
     }
     else
     {
-        x -= 0.001f;
+        light_pos.x -= 0.001f;
         //y -= 0.001f;
-        z -= 0.001f;
+        light_pos.z -= 0.001f;
     }
 
     UpdateScore();
@@ -172,24 +170,24 @@ void UpdateGame(void)
     // 壁処理の更新
     UpdateMeshWall();
 
-    UpdateTree();
+    //UpdateTree();
 
     UpdateBullet();
 
-    // 影の更新処理
-    UpdateShadow();
+    //// 影の更新処理
+    //UpdateShadow();
 
-    UpdateRenderer(x, y, z);
+    UpdateRenderer(light_pos.x, light_pos.y, light_pos.z);
 
     // プレイヤーの更新処理
     UpdatePlayer();
 
 
-    HitCheck();
+    HitCheck(light_pos);
 
     if (time / 60 == 30)
     {
-        SetMode(MODE_RESULT);
+        //SetMode(MODE_RESULT);
     }
 }
 
@@ -207,8 +205,8 @@ void DrawGame(void)
     // 壁の描画処理
     DrawMeshWall();
 
-    DrawTree();
-    DrawShadow();
+    //DrawTree();
+    //DrawShadow();
     // プレイヤーの描画処理
     DrawPlayer();
 

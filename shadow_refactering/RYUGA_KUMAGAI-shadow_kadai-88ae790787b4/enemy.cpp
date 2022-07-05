@@ -4,6 +4,8 @@
 // Author : GP11A132 12 熊谷隆我
 //
 //=============================================================================
+#pragma once
+
 #include "main.h"
 #include "input.h"
 #include "enemy.h"
@@ -29,8 +31,6 @@
 // グローバル変数
 //*****************************************************************************
 static ENEMY			g_Enemy[MAX_ENEMY];				// エネミー
-static DX11_MODEL       g_Shadow[MAX_ENEMY];
-
 
 // エネミーの線形移動用の移動座標テーブル
 static D3DXVECTOR3	g_MoveTbl[] = {
@@ -57,7 +57,7 @@ HRESULT InitEnemy(void)
         z = rand() % (WALL_UP - WALL_DOWN) + WALL_DOWN;
         x = rand() % (WALL_RIGHT - WALL_LEFT) + WALL_LEFT;
 		LoadModel(MODEL_ENEMY, &g_Enemy[i].model);
-        InitStencilShadow(MODEL_ENEMY, &g_Shadow[i]);
+        InitStencilShadow(MODEL_ENEMY, &g_shadow[i]);
 
 		g_Enemy[i].pos = D3DXVECTOR3(x, 7.0f, z);
 		g_Enemy[i].rot = D3DXVECTOR3(0.0f, D3DX_PI, 0.0f);
@@ -70,7 +70,7 @@ HRESULT InitEnemy(void)
         g_Enemy[i].use       = true;
         g_Enemy[i].stop      = false;
 
-		g_Enemy[i].shadowIdx = CreateShadow(pos, ENEMY_SHADOW_SIZE, ENEMY_SHADOW_SIZE);
+		g_Enemy[i].shadowIdx = i;
 
         g_Enemy[i].radius    = 10.0;
         g_Enemy[i].time      = 0.0f;
@@ -152,8 +152,8 @@ void DrawEnemy(void)
 
             //影描画
             LIGHT *Light = GetLight();
-            CreateStencilShadow(g_Enemy[i].mtxWorld, *Light, &g_Shadow[i]);
-            DrawStencilShadow(&g_Shadow[i], g_Enemy[i].mtxWorld);
+            CreateStencilShadow(g_Enemy[i].mtxWorld, *Light, &g_shadow[i]);
+            DrawStencilShadow(&g_shadow[i], g_Enemy[i].mtxWorld);
             SetBlendState(BLEND_MODE_ALPHABLEND);
         }
 	}
