@@ -51,6 +51,7 @@ static float	g_MoveSpd[] = {
 //=============================================================================
 HRESULT InitEnemy(void)
 {
+    STENCIL_SHADOW *g_shadow = GetStencilShadow();
     float x, z;
 	for (int i = 0; i < MAX_ENEMY; i++)
 	{
@@ -116,6 +117,7 @@ void UpdateEnemy(void)
 void DrawEnemy(void)
 {
 	D3DXMATRIX mtxScl, mtxRot, mtxTranslate;
+    STENCIL_SHADOW* g_shadow = GetStencilShadow();
 
 	// ƒJƒŠƒ“ƒO–³Œø
 	SetCullingMode(CULL_MODE_NONE);

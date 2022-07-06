@@ -31,7 +31,6 @@ typedef struct
 // グローバル変数
 //*********************************************************
 
-static STENCIL_SHADOW g_shadow[MAX_STENCIL_SHADOW];
 
 //*****************************************************************************
 // プロトタイプ宣言
@@ -45,3 +44,4 @@ void polygon(void);
 void Peshanko(DX11_MODEL *Model);
 void SetPositionShadow(int nIdxShadow, D3DXVECTOR3 pos);
 void ReleaseShadow(int nIdxShadow);
+STENCIL_SHADOW* GetStencilShadow(void);

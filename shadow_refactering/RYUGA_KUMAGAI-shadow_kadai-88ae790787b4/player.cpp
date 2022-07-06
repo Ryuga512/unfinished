@@ -46,8 +46,11 @@ float roty = D3DX_PI;
 //=============================================================================
 HRESULT InitPlayer(void)
 {
+    STENCIL_SHADOW* g_shadow = GetStencilShadow();
+    g_Player.shadowIdx = MAX_STENCIL_SHADOW - 1;
+
 	LoadModel(MODEL_PLAYER, &g_Player.model);
-    InitStencilShadow(MODEL_PLAYER, &g_shadow[MAX_STENCIL_SHADOW]);
+    InitStencilShadow(MODEL_PLAYER, &g_shadow[g_Player.shadowIdx]);
 	g_Player.pos = D3DXVECTOR3(0.0f, 7.0f, -50.0f);
 	g_Player.rot = D3DXVECTOR3(0.0f, D3DX_PI, 0.0f);
 	g_Player.scl = D3DXVECTOR3(1.0f, 1.0f, 1.0f);
@@ -58,7 +61,6 @@ HRESULT InitPlayer(void)
 
 	D3DXVECTOR3 pos = g_Player.pos;
 	pos.y = 0.0f;
-    g_Player.shadowIdx = MAX_STENCIL_SHADOW;
 
     g_Player.use = true;
 
@@ -73,9 +75,10 @@ HRESULT InitPlayer(void)
 //=============================================================================
 void UninitPlayer(void)
 {
+    STENCIL_SHADOW* g_shadow = GetStencilShadow();
 	// モデルの解放処理
 	UnloadModel(&g_Player.model);
-    UnloadStencilShadow(&g_shadow[MAX_STENCIL_SHADOW]);
+    UnloadStencilShadow(&g_shadow[g_Player.shadowIdx]);
 }
 
 //=============================================================================
@@ -176,7 +179,7 @@ void UpdatePlayer(void)
         SetBullet(g_Player.pos, D3DXVECTOR3(cam->rot.x, cam->rot.y, cam->rot.z));
 	}
 
-    SetPositionShadow(MAX_STENCIL_SHADOW, g_Player.pos);
+    SetPositionShadow(g_Player.shadowIdx, g_Player.pos);
 
 }
 
@@ -185,6 +188,8 @@ void UpdatePlayer(void)
 //=============================================================================
 void DrawPlayer(void)
 {
+    STENCIL_SHADOW* g_shadow = GetStencilShadow();
+
 	// カリング無効
 	SetCullingMode(CULL_MODE_NONE);
 
@@ -220,8 +225,8 @@ void DrawPlayer(void)
     LIGHT *Light = GetLight();
 
     //影描画
-    CreateStencilShadow(g_Player.mtxWorld, *Light, &g_shadow[MAX_STENCIL_SHADOW]);
-    DrawStencilShadow(&g_shadow[MAX_STENCIL_SHADOW], g_Player.mtxWorld);
+    CreateStencilShadow(g_Player.mtxWorld, *Light, &g_shadow[g_Player.shadowIdx]);
+    DrawStencilShadow(&g_shadow[g_Player.shadowIdx], g_Player.mtxWorld);
 
     // 階層アニメーション
     for (int i = 0; i < PLAYER_PARTS_MAX; i++)

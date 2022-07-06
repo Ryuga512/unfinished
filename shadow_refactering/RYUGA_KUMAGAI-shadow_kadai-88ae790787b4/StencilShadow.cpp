@@ -55,6 +55,7 @@ ID3D11Buffer* VertexBuffer;
 ID3D11Buffer* m_pCBuffPerMaterial;
 DWORD id[2][2];
 int NumVertices = 0;
+static STENCIL_SHADOW g_shadow[MAX_STENCIL_SHADOW];
 
 bool InitStencilShadow(char *FileName, STENCIL_SHADOW *shadow)
 {
@@ -114,6 +115,7 @@ bool InitStencilShadow(char *FileName, STENCIL_SHADOW *shadow)
         }
     }
     shadow->bUse = true;
+
     return true;
 }
 
@@ -229,7 +231,6 @@ bool CreateStencilShadow(D3DXMATRIX world, LIGHT Light, STENCIL_SHADOW *shadow)
 
     int *edge = new int[shadow->model.VertexNum * 4];
     int Edges = 0;
-
     /**********************************************************************/
     //Å`ãÈå`à¯Ç´êLÇŒÇµç≈ìKâªå„ï“Å`
     /**********************************************************************/
@@ -275,13 +276,13 @@ bool CreateStencilShadow(D3DXMATRIX world, LIGHT Light, STENCIL_SHADOW *shadow)
         vertex2 = vertex0 + dir * 10000;
         vertex3 = vertex1 + dir * 10000;
 
-        model[NumVertices + 0].Position = vertex0;
-        model[NumVertices + 1].Position = vertex1;
-        model[NumVertices + 2].Position = vertex2;
+       model[NumVertices + 0].Position = vertex0;
+       model[NumVertices + 1].Position = vertex1;
+       model[NumVertices + 2].Position = vertex2;
 
-        model[NumVertices + 3].Position = vertex1;
-        model[NumVertices + 4].Position = vertex3;
-        model[NumVertices + 5].Position = vertex2;
+       model[NumVertices + 3].Position = vertex1;
+       model[NumVertices + 4].Position = vertex3;
+       model[NumVertices + 5].Position = vertex2;
 
         NumVertices += 6;
     }
@@ -429,4 +430,10 @@ void Peshanko(DX11_MODEL *Model)
     DrawModel(Model);
 
     return;
+}
+
+
+STENCIL_SHADOW* GetStencilShadow(void)
+{
+    return g_shadow;
 }

@@ -385,30 +385,62 @@ bool HitCheckBB3D(D3DXVECTOR3 mpos, float mx, float my, float mz, D3DXVECTOR3 yp
     }
     return ans;
 }
+void InitOBB(void)
+{
+    BULLET* model_bullet = GetBullet();
 
+    for (int i = 0; i < MAX_BULLET; i++)
+    {
+        model_bullet[i].BBox.LengthX = model_bullet[i].fWidth / 2;
+        model_bullet[i].BBox.LengthY = 0.5f;       
+        model_bullet[i].BBox.LengthZ = model_bullet[i].fHeight / 2;
+    }
+    InitOBBShadow();
+}
+
+void InitOBBShadow()
+{
+    STENCIL_SHADOW* model_enemy = GetStencilShadow();
+    //このへんバグ
+
+    ID3D11DeviceContext* pDeviceContext = GetDeviceContext();
+    D3DXVECTOR3 Max, Min;
+
+    for (int i = 0; i < MAX_STENCIL_SHADOW; i++)
+        //頂点をロック
+    {
+        D3D11_MAPPED_SUBRESOURCE msr;
+        pDeviceContext->Map(model_enemy[i].dx_model.VertexBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &msr);
+
+        VERTEX_3D* pVertices = (VERTEX_3D*)msr.pData;
+
+        // メッシュ内頂点位置の最大と最小を検索する
+        D3DXComputeBoundingBox(&pVertices->Position, model_enemy[i].model.VertexNum, sizeof(VERTEX_3D), &Min, &Max);
+
+        //軸ベクトル 軸の長さ（この場合ボックスの各半径）を初期化する
+        model_enemy[i].BBox.LengthX = (Max.x - Min.x)/2;
+        model_enemy[i].BBox.LengthY = 0.1f;
+        model_enemy[i].BBox.LengthZ = (Max.z - Min.z)/2;
+    }
+
+}
 bool HitCheckOBB(BULLET* model_bullet, STENCIL_SHADOW* model_enemy)
 {
-    model_bullet->BBox.LengthX = model_bullet->fWidth / 2;
-    model_bullet->BBox.LengthY = 1.0f;
-    model_bullet->BBox.LengthX = model_bullet->fHeight / 2;
+    D3DXMATRIX /*mtxScl, mtxRot, mtxTranslate, */bullet_mtx_rot, enemy_mtx_rot;
+    //pVB->Lock(0, 0, &pVertices, 0);
 
-    LPDIRECT3DVERTEXBUFFER9 pVB = NULL;
-    VOID* pVertices = NULL;
+    D3DXVECTOR3 distance = model_enemy->pos - model_bullet->pos;
     D3DXVECTOR3 Max, Min;
-    UINT stride = sizeof(VERTEX_3D);
+
+    D3DXVECTOR3 separate;
 
     // メッシュ内頂点位置の最大と最小を検索する
-    D3DXComputeBoundingBox((D3DXVECTOR3*)pVertices, model_enemy->model.VertexNum,
-        stride, &Min, &Max);
+    D3DXComputeBoundingBox((D3DXVECTOR3*)model_enemy->model.VertexArray, model_enemy->model.VertexNum, sizeof(VERTEX_3D), &Min, &Max);
 
     //軸ベクトル 軸の長さ（この場合ボックスの各半径）を初期化する
     model_enemy->BBox.LengthX = (Max.x - Min.x) / 2;
     model_enemy->BBox.LengthY = 0.1f;
-    model_enemy->BBox.LengthX = (Max.z - Min.z) / 2;
-         
-    D3DXVECTOR3 distance = model_enemy->pos - model_bullet->pos;
-
-    D3DXVECTOR3 separate;
+    model_enemy->BBox.LengthZ = (Max.z - Min.z) / 2;
 
     //それぞれのローカル基底軸ベクトルに、それぞれの回転を反映させる
     model_bullet->BBox.AxisX = D3DXVECTOR3(1, 0, 0);
@@ -419,13 +451,30 @@ bool HitCheckOBB(BULLET* model_bullet, STENCIL_SHADOW* model_enemy)
     model_enemy->BBox.AxisY = D3DXVECTOR3(0, 1, 0);
     model_enemy->BBox.AxisZ = D3DXVECTOR3(0, 0, 1);
 
-    D3DXVec3TransformCoord(&model_bullet->BBox.AxisX,&model_bullet->BBox.AxisX, &model_bullet->mtxWorld);                                             
-    D3DXVec3TransformCoord(&model_bullet->BBox.AxisY,&model_bullet->BBox.AxisY, &model_bullet->mtxWorld);
-    D3DXVec3TransformCoord(&model_bullet->BBox.AxisZ,&model_bullet->BBox.AxisZ, &model_bullet->mtxWorld);
+    //// ワールドマトリックスの初期化
+    //D3DXMatrixIdentity(&bullet_mtx_world);
+    //D3DXMatrixIdentity(&enemy_mtx_world);
 
-    D3DXVec3TransformCoord(&model_enemy->BBox.AxisX, &model_enemy->BBox.AxisX, &model_enemy->mtxWorld);
-    D3DXVec3TransformCoord(&model_enemy->BBox.AxisY, &model_enemy->BBox.AxisY, &model_enemy->mtxWorld);
-    D3DXVec3TransformCoord(&model_enemy->BBox.AxisZ, &model_enemy->BBox.AxisZ, &model_enemy->mtxWorld);
+    //// スケールを反映
+    //D3DXMatrixScaling(&mtxScl, model_bullet->scl.x, model_bullet->scl.y, model_bullet->scl.z);
+    //D3DXMatrixMultiply(&bullet_mtx_world, &model_bullet->mtxWorld, &mtxScl);
+    //// スケールを反映
+    //D3DXMatrixScaling(&mtxScl, model_enemy->scl.x, model_enemy->scl.y, model_enemy->scl.z);
+    //D3DXMatrixMultiply(&enemy_mtx_world, &model_enemy->mtxWorld, &mtxScl);
+
+    // 回転を反映
+    D3DXMatrixRotationYawPitchRoll(&bullet_mtx_rot, model_bullet->rot.y, model_bullet->rot.x, model_bullet->rot.z);
+    D3DXMatrixRotationYawPitchRoll(&enemy_mtx_rot, model_enemy->rot.y, model_enemy->rot.x, model_enemy->rot.z);
+    /*D3DXMatrixMultiply(&bullet_mtx_world, &bullet_mtx_world, &mtxRot);
+    D3DXMatrixMultiply(&enemy_mtx_world, &enemy_mtx_world, &mtxRot);*/
+
+    D3DXVec3TransformCoord(&model_bullet->BBox.AxisX,&model_bullet->BBox.AxisX, &bullet_mtx_rot);                                             
+    D3DXVec3TransformCoord(&model_bullet->BBox.AxisY,&model_bullet->BBox.AxisY, &bullet_mtx_rot);
+    D3DXVec3TransformCoord(&model_bullet->BBox.AxisZ,&model_bullet->BBox.AxisZ, &bullet_mtx_rot);
+
+    D3DXVec3TransformCoord(&model_enemy->BBox.AxisX, &model_enemy->BBox.AxisX, &enemy_mtx_rot);
+    D3DXVec3TransformCoord(&model_enemy->BBox.AxisY, &model_enemy->BBox.AxisY, &enemy_mtx_rot);
+    D3DXVec3TransformCoord(&model_enemy->BBox.AxisZ, &model_enemy->BBox.AxisZ, &enemy_mtx_rot);
 
     	//ボックスAのローカル基底軸を基準にした、”影”の算出（3パターン）
 	{		
@@ -473,7 +522,7 @@ bool HitCheckOBB(BULLET* model_bullet, STENCIL_SHADOW* model_enemy)
         }
         //ボックスAのZ軸
         {
-            //と　ボックスBのX軸との外積ベクトルを分離軸とした場合
+            //と　ボックスBのX軸との外積分離軸とした場合
             D3DXVec3Cross(&separate, &model_bullet->BBox.AxisZ, &model_enemy->BBox.AxisX);
             if (!CompareLength(&model_bullet->BBox, &model_enemy->BBox, &separate, &distance)) return false;
             //と　ボックスBのY軸との外積ベクトルを分離軸とした場合
@@ -516,6 +565,7 @@ void HitCheck(D3DXVECTOR3 light_position)
     PLAYER *player = GetPlayer();
     ENEMY  *enemy = GetEnemy();
     BULLET *bullet = GetBullet();
+    STENCIL_SHADOW *g_shadow = GetStencilShadow();
 
     // プレイヤーと敵との当たり判定
     //for (int i = 0; i < MAX_PLAYER; i++)

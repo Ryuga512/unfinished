@@ -78,13 +78,14 @@ struct BBOX
 	FLOAT LengthX;
 	FLOAT LengthY;
 	FLOAT LengthZ;
-	BBOX()
-	{
-		ZeroMemory(this, sizeof(BBOX));
-		AxisX = D3DXVECTOR3(1, 0, 0);
-		AxisY = D3DXVECTOR3(0, 1, 0);
-		AxisZ = D3DXVECTOR3(0, 0, 1);
-	}
+	LPDIRECT3DVERTEXBUFFER9 vertex_buffer_9;
+	//BBOX()
+	//{
+	//	ZeroMemory(this, sizeof(BBOX));
+	//	AxisX = D3DXVECTOR3(1, 0, 0);
+	//	AxisY = D3DXVECTOR3(0, 1, 0);
+	//	AxisZ = D3DXVECTOR3(0, 0, 1);
+	//}
 };
 
 //*****************************************************************************
@@ -101,3 +102,5 @@ bool HitCheckOBB(BULLET* model_bullet, ENEMY* model_enemy);
 bool CompareLength(BBOX* box_a, BBOX* box_b, D3DXVECTOR3* separate, D3DXVECTOR3* distance);
 void SetMode(MODE mode);
 MODE GetMode(void);
+void InitOBB(void);
+void InitOBBShadow(void);

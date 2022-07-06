@@ -95,7 +95,8 @@ HRESULT InitGame(void)
 
     // 背面ポリゴンをカリング
     SetCullingMode(CULL_MODE_BACK);
-
+    
+    InitOBB();
     return S_OK;
 }
 
@@ -182,12 +183,12 @@ void UpdateGame(void)
     // プレイヤーの更新処理
     UpdatePlayer();
 
-
     HitCheck(light_pos);
+
 
     if (time / 60 == 30)
     {
-        //SetMode(MODE_RESULT);
+        SetMode(MODE_RESULT);
     }
 }
 
@@ -214,6 +215,7 @@ void DrawGame(void)
     DrawEnemy();
 
     polygon();
+
 
     //DrawParticle();
 
