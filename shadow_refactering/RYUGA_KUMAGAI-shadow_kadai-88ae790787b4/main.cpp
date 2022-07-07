@@ -431,16 +431,24 @@ bool HitCheckOBB(BULLET* model_bullet, STENCIL_SHADOW* model_enemy)
 
     D3DXVECTOR3 distance = model_enemy->pos - model_bullet->pos;
     D3DXVECTOR3 Max, Min;
+    ID3D11DeviceContext* pDeviceContext = GetDeviceContext();
 
     D3DXVECTOR3 separate;
 
-    // メッシュ内頂点位置の最大と最小を検索する
-    D3DXComputeBoundingBox((D3DXVECTOR3*)model_enemy->model.VertexArray, model_enemy->model.VertexNum, sizeof(VERTEX_3D), &Min, &Max);
+    D3D11_MAPPED_SUBRESOURCE msr;
+    pDeviceContext->Map(model_enemy->dx_model.VertexBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &msr);
 
+    VERTEX_3D* pVertices = (VERTEX_3D*)msr.pData;
+
+    // メッシュ内頂点位置の最大と最小を検索する
+    D3DXComputeBoundingBox(&pVertices->Position, model_enemy->model.VertexNum, sizeof(VERTEX_3D), &Min, &Max);
+
+    pDeviceContext->Unmap(model_enemy->dx_model.VertexBuffer, 0);
     //軸ベクトル 軸の長さ（この場合ボックスの各半径）を初期化する
     model_enemy->BBox.LengthX = (Max.x - Min.x) / 2;
     model_enemy->BBox.LengthY = 0.1f;
-    model_enemy->BBox.LengthZ = (Max.z - Min.z) / 2;
+    model_enemy->BBox.LengthZ = (Max.z/500 - Min.z) / 2;
+
 
     //それぞれのローカル基底軸ベクトルに、それぞれの回転を反映させる
     model_bullet->BBox.AxisX = D3DXVECTOR3(1, 0, 0);
