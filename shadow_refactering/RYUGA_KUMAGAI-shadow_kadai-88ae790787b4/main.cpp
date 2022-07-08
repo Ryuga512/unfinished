@@ -426,28 +426,16 @@ void InitOBBShadow()
 }
 bool HitCheckOBB(BULLET* model_bullet, STENCIL_SHADOW* model_enemy)
 {
-    D3DXMATRIX /*mtxScl, mtxRot, mtxTranslate, */bullet_mtx_rot, enemy_mtx_rot;
-    //pVB->Lock(0, 0, &pVertices, 0);
+    D3DXMATRIX bullet_mtx_rot, enemy_mtx_rot;
 
     D3DXVECTOR3 distance = model_enemy->pos - model_bullet->pos;
-    D3DXVECTOR3 Max, Min;
-    ID3D11DeviceContext* pDeviceContext = GetDeviceContext();
 
     D3DXVECTOR3 separate;
 
-    D3D11_MAPPED_SUBRESOURCE msr;
-    pDeviceContext->Map(model_enemy->dx_model.VertexBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &msr);
-
-    VERTEX_3D* pVertices = (VERTEX_3D*)msr.pData;
-
-    // メッシュ内頂点位置の最大と最小を検索する
-    D3DXComputeBoundingBox(&pVertices->Position, model_enemy->model.VertexNum, sizeof(VERTEX_3D), &Min, &Max);
-
-    pDeviceContext->Unmap(model_enemy->dx_model.VertexBuffer, 0);
     //軸ベクトル 軸の長さ（この場合ボックスの各半径）を初期化する
-    model_enemy->BBox.LengthX = (Max.x - Min.x) / 2;
+    model_enemy->BBox.LengthX = (model_enemy->BBox.Max.x - model_enemy->BBox.Min.x) / 2;
     model_enemy->BBox.LengthY = 0.1f;
-    model_enemy->BBox.LengthZ = (Max.z/500 - Min.z) / 2;
+    model_enemy->BBox.LengthZ = (model_enemy->BBox.Max.z/500 - model_enemy->BBox.Min.z) / 2;
 
 
     //それぞれのローカル基底軸ベクトルに、それぞれの回転を反映させる
@@ -459,22 +447,10 @@ bool HitCheckOBB(BULLET* model_bullet, STENCIL_SHADOW* model_enemy)
     model_enemy->BBox.AxisY = D3DXVECTOR3(0, 1, 0);
     model_enemy->BBox.AxisZ = D3DXVECTOR3(0, 0, 1);
 
-    //// ワールドマトリックスの初期化
-    //D3DXMatrixIdentity(&bullet_mtx_world);
-    //D3DXMatrixIdentity(&enemy_mtx_world);
-
-    //// スケールを反映
-    //D3DXMatrixScaling(&mtxScl, model_bullet->scl.x, model_bullet->scl.y, model_bullet->scl.z);
-    //D3DXMatrixMultiply(&bullet_mtx_world, &model_bullet->mtxWorld, &mtxScl);
-    //// スケールを反映
-    //D3DXMatrixScaling(&mtxScl, model_enemy->scl.x, model_enemy->scl.y, model_enemy->scl.z);
-    //D3DXMatrixMultiply(&enemy_mtx_world, &model_enemy->mtxWorld, &mtxScl);
 
     // 回転を反映
     D3DXMatrixRotationYawPitchRoll(&bullet_mtx_rot, model_bullet->rot.y, model_bullet->rot.x, model_bullet->rot.z);
     D3DXMatrixRotationYawPitchRoll(&enemy_mtx_rot, model_enemy->rot.y, model_enemy->rot.x, model_enemy->rot.z);
-    /*D3DXMatrixMultiply(&bullet_mtx_world, &bullet_mtx_world, &mtxRot);
-    D3DXMatrixMultiply(&enemy_mtx_world, &enemy_mtx_world, &mtxRot);*/
 
     D3DXVec3TransformCoord(&model_bullet->BBox.AxisX,&model_bullet->BBox.AxisX, &bullet_mtx_rot);                                             
     D3DXVec3TransformCoord(&model_bullet->BBox.AxisY,&model_bullet->BBox.AxisY, &bullet_mtx_rot);

@@ -237,6 +237,8 @@ bool CreateStencilShadow(D3DXMATRIX world, LIGHT Light, STENCIL_SHADOW *shadow)
     //全頂点について、引き延ばしを検討
     ImmediateContext->Map(shadow->dx_model.VertexBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &SubR);
     VERTEX_3D* model = (VERTEX_3D*)SubR.pData;
+    // メッシュ内頂点位置の最大と最小を検索する
+
     for (int i = 0; i < shadow->model.VertexNum - 3; i += 3)
     {
         //頂点を３つ使い、面の法線を求める
@@ -286,6 +288,8 @@ bool CreateStencilShadow(D3DXMATRIX world, LIGHT Light, STENCIL_SHADOW *shadow)
 
         NumVertices += 6;
     }
+    D3DXComputeBoundingBox(&model->Position, shadow->model.VertexNum, sizeof(VERTEX_3D), &shadow->BBox.Min, &shadow->BBox.Max);
+
     ImmediateContext->Unmap(shadow->dx_model.VertexBuffer, 0);
 
     delete[] edge;
