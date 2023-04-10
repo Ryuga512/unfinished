@@ -10,7 +10,6 @@
 #include "input.h"
 #include "camera.h"
 #include "player.h"
-#include "shadow.h"
 #include "renderer.h"
 #include "bullet.h"
 #include "StencilShadow.h"

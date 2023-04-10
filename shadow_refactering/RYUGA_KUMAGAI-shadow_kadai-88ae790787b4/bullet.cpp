@@ -8,7 +8,6 @@
 #include "main.h"
 #include "input.h"
 #include "camera.h"
-#include "shadow.h"
 #include "bullet.h"
 #include "main.h"
 #include "StencilShadow.h"

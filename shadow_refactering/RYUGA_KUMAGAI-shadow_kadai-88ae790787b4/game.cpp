@@ -17,9 +17,6 @@
 #include "sound.h"
 #include "meshfield.h"
 #include "meshwall.h"
-#include "shadow.h"
-#include "tree.h"
-#include "particle.h"
 #include "StencilShadow.h"
 //*****************************************************************************
 // É}ÉNÉçíËã`

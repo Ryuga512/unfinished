@@ -13,18 +13,14 @@
 #include "enemy.h"
 #include "meshfield.h"
 #include "meshwall.h"
-#include "shadow.h"
-#include "tree.h"
 #include "bullet.h"
 #include "score.h"
 #include "sound.h"
-#include "particle.h"
 #include "game.h"
 #include "title.h"
 #include "fade.h"
 #include "StencilShadow.h"
 #include "result.h"
-#include "shadow.h"
 //*****************************************************************************
 // É}ÉNÉçíËã`
 //*****************************************************************************

@@ -9,7 +9,6 @@
 #include "main.h"
 #include "input.h"
 #include "enemy.h"
-#include "shadow.h"
 #include "renderer.h"
 #include "StencilShadow.h"
 //*****************************************************************************
