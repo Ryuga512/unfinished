@@ -2,7 +2,7 @@
 
 ファイルが2つ含まれています
 
-1つは「unfinished」という2Dゲーム
+1つは「unfinished」という2Dゲーム（名前は「unfinished_refactoring」になっています）
 
 プレイヤー移動：矢印キー
 攻撃：スペースキー
